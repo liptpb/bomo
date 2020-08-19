@@ -30,7 +30,7 @@ export function get(url, params={}, headers={}){
     return new Promise((resolve, reject) => {
     this.$axios.post(url, data)
      .then(response => {
-     resolve(response.data);
+     resolve(response);
      }, err => {
      reject(err)
      })

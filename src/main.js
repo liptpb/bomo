@@ -24,13 +24,19 @@ Vue.prototype.$get = get;
 import 'amfe-flexible/index.js'
 
 
-// 添加请求拦截器
-Axios.interceptors.request.use(function (config) {
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
 
+// 添加请求拦截器，在请求头中加token
+Axios.interceptors.request.use(
+  config => {
+    if (localStorage.getItem('userToken')) {
+      config.headers.etoken = localStorage.getItem('userToken');
+    }
+ 
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  });
 // 添加响应拦截器
 Axios.interceptors.response.use(function (response) {
   if(response.status == 200){
