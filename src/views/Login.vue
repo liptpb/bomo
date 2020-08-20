@@ -62,6 +62,8 @@ import { mapMutations } from 'vuex';
 		methods:{
       ...mapMutations(['changeLogin']), 
 			onSubmit (values) {
+        this.$router.push('/techInfo')
+        return
       if (this.phoneStyle) {
         this.$post(this.HOST + '/login', {
             "mobile" : this.mobile,vc: this.code})

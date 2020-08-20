@@ -24,14 +24,21 @@ Vue.prototype.$get = get;
 import 'amfe-flexible/index.js'
 
 
-
+Axios.defaults.timeout = 5000;
+Axios.defaults.baseURL ='';
 // 添加请求拦截器，在请求头中加token
 Axios.interceptors.request.use(
   config => {
-    if (localStorage.getItem('userToken')) {
-      config.headers.etoken = localStorage.getItem('userToken');
+    if(config.url!='/login'){ //登录页面不验证token
+      let token = localStorage.getItem('userToken')
+      token = token.replace(/\"/g, "")
+      console.log(token)
+      if (token) {
+       config.headers.etoken = `${token}`;
+       config.headers['content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+      }
+      console.log(config)
     }
- 
     return config;
   },
   error => {
