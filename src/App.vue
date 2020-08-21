@@ -1,5 +1,5 @@
 <template>
-  <div class="clearfix">
+  <div id="app">
     <router-view/>
   </div>
 </template>
@@ -10,15 +10,7 @@ export default {
 }
 </script>
 
-<style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    padding: 0;
-    margin: 0;
-  }
-  /*#app>div{width:100%; height: 100%;}*/
+<style lang="less">
+  @import '../static/less/app.less'; // 全局自定义的css样式
 </style>
+
