@@ -17,7 +17,6 @@ importAll(require.context('./',true,/\.routes\.js/));
 
 const router = new Router({
   routes: [
-<<<<<<< HEAD
     // {
     //   path: '/',
     //   name: 'techInfo',
@@ -28,18 +27,6 @@ const router = new Router({
     //   component: techInfo,
     //   name: 'main',
     // }
-=======
-    {
-      path: '/',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/techInfo',
-      component: techInfo,
-      name: 'main',
-    }
->>>>>>> a13867a952a75e82b81bf70ce14fefbcf4b65f10
   ]
 })
 // 导航守卫
