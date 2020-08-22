@@ -175,24 +175,13 @@
             }
         },
         created() {
-          this.$post(this.HOST + '/login/vc', {
-  "mobile" : "15518976037"
-  }).then((res) =>{
-       console.log(res)
-    }).catch(function (error) {
-        console.log(error);
-    });
-
-          // let url= this.HOST + '/admin/cus/24?AccessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdDb2RlIjoiMiIsImxvZ2luTmFtZSI6ImxpYm9xaWFuIiwicm9sZUNvZGUiOiIwMDAwNTciLCJpZCI6MiwidXNlck5hbWUiOiIgbGlib3FpYW4ifQ.f2egaKoV1nN3_9HF7thxXh33r9pqC3auogcMKOUhPCU'
-          // this.$axios.get(url)
-          //   .then( (response) =>{
-          //     console.log(response.data)
-          //     this.cumInfo = response.data
-          //   })
-          //   .catch( (error) => {
-          //     console.log(error);
-          //   });
-
+          this.$get(this.HOST + '/index', {
+            
+            }).then((res) =>{
+                console.log(res)
+              }).catch(function (error) {
+                  console.log(error);
+              });
         },
         watch: {
             cityName: {

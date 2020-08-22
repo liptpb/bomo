@@ -28,6 +28,7 @@ Vue.config.productionTip = false
 import 'amfe-flexible/index.js'
 
 
+<<<<<<< HEAD
 // 添加请求拦截器
 // Axios.interceptors.request.use(function (config) {
 //   return config;
@@ -44,6 +45,37 @@ import 'amfe-flexible/index.js'
 // }, function (error) {
 //   return Promise.reject(error);
 // });
+=======
+Axios.defaults.timeout = 5000;
+Axios.defaults.baseURL ='';
+// 添加请求拦截器，在请求头中加token
+Axios.interceptors.request.use(
+  config => {
+    if(config.url!='/login'){ //登录页面不验证token
+      let token = localStorage.getItem('userToken')
+      token = token.replace(/\"/g, "")
+      console.log(token)
+      if (token) {
+       config.headers.etoken = `${token}`;
+       config.headers['content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+      }
+      console.log(config)
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  });
+// 添加响应拦截器
+Axios.interceptors.response.use(function (response) {
+  if(response.status == 200){
+    return response.data
+  }
+
+}, function (error) {
+  return Promise.reject(error);
+});
+>>>>>>> a13867a952a75e82b81bf70ce14fefbcf4b65f10
 
 /* eslint-disable no-new */
 new Vue({
