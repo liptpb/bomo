@@ -34,7 +34,7 @@ Axios.interceptors.request.use(
       token = token.replace(/\"/g, "")
       console.log(token)
       if (token) {
-       config.headers.etoken = `${token}`;
+       config.headers.etoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ';
        config.headers['content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
       }
       console.log(config)

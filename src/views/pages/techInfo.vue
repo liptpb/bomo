@@ -175,6 +175,7 @@
             }
         },
         created() {
+          debugger
           this.$get(this.HOST + '/index', {
             
             }).then((res) =>{

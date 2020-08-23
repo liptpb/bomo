@@ -8,8 +8,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login
+      name: 'techInfo',
+      component: techInfo
     },
     {
       path: '/techInfo',
