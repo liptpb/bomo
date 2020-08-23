@@ -21,7 +21,7 @@ const router = new Router({
       path: '/',
       name: 'Index',
       component: _import('Index'),
-      redirect: '/login',
+      redirect: '/Index',
       children: [
         ...routerList,
       ]
