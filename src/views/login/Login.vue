@@ -15,7 +15,9 @@
                     <input class="input" type="number" v-model="code" @blur="$blur" placeholder="请输入验证码">
               </div>
           </div>
-          <div class="login-btn">登录</div>
+          <div class="login-btn">
+              <van-button color="#FF9900" :round="true" size="large">登录</van-button>
+          </div>
       </div>
   </div>
 </template>
@@ -81,16 +83,7 @@
                 margin-bottom: 35px;
             }
             .login-btn {
-                width: 100%;
-                height: 44px;
-                line-height: 44px;
                 margin-top: 47px;
-                text-align: center;
-                background-color:rgba(255,154,0,1);
-                border-radius: 22px;
-                color: #ffffff;
-                font-size: 15px;
-                font-weight: 600;
             }
         }
     }
