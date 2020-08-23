@@ -4,14 +4,19 @@ import App from './App'
 import router from './router'
 /* Vant UI 引入*/
 
-// import Vant from 'vant'
-// import 'vant/lib/index.css'
-// Vue.use(Vant)
+import Vant from 'vant'
+import 'vant/lib/index.css'
+Vue.use(Vant)
 
 import { VueAxios } from './utils/request'
 Vue.use(VueAxios)
 
 Vue.config.productionTip = false
+
+// 软键盘弹出问题
+import keyboard from '@/utils/softKeyboard'
+Vue.prototype.$blur = keyboard.blur;
+Vue.prototype.$focus = keyboard.focusInput;
 
 
 /**Axios**/

@@ -17,21 +17,24 @@ importAll(require.context('./',true,/\.routes\.js/));
 
 const router = new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'techInfo',
-    //   component: techInfo
-    // },
-    // {
-    //   path: '/techInfo',
-    //   component: techInfo,
-    //   name: 'main',
-    // }
+    {
+      path: '/',
+      name: 'Index',
+      component: _import('Index'),
+      redirect: '/login',
+      children: [
+        ...routerList,
+      ]
+    }
   ]
 })
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  
   if (to.path === '/login') {
     next();
   } else {

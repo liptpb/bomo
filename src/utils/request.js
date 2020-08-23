@@ -3,7 +3,7 @@ import axios from 'axios'
 import { VueAxios } from './axios'
 
 // 创建 axios 实例
-console.log(111)
+console.log(222)
 const service = axios.create({
     //baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
     timeout: 18000,// 请求超时时间

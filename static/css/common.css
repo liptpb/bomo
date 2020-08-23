@@ -189,3 +189,51 @@ a:link,a:active,a:visited,a:hover {
   opacity: 0
 }
 
+
+/*1px*/
+.border1px {
+  border-width: 1px;
+  border-style: solid;
+}
+.border-bottom {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+.border-top {
+  border-top-width: 1px;
+  border-top-style: solid;
+}
+.border-right {
+  border-right-width: 1px;
+  border-right-style: solid;
+}
+.line1px {
+  height: 1px;
+}
+.widthLine1px {
+  width: 1px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2.0) {
+  .border1px::after,
+  .border-bottom::after,
+  .border-top::after,
+  .border-right::after,
+  .line1px::after,
+  .widthLine1px::after{
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+}
+
+/* 3倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 3.0) {
+  .border1px::after,
+  .border-bottom::after,
+  .border-top::after,
+  .border-right::after,
+  .line1px::after,
+  .widthLine1px::after{
+    -webkit-transform: scaleY(0.33);
+    transform: scaleY(0.33);
+  }
+}
