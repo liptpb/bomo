@@ -12,6 +12,7 @@ function importAll(r) {
     (key) => routerList = routerList.concat(r(key).default)
   )
 }
+console.log(routerList)
 // require.context(url,bool,reg) url查找路径 bool是否查找子目录 reg正则表达式
 importAll(require.context('./',true,/\.routes\.js/));
 

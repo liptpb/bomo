@@ -11,3 +11,15 @@ body .app {
 .app-container {
   padding-bottom: 50px;
 }
+.flexJue{
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;  
+  flex-wrap: wrap;
+}
+.colorH{
+  color:#FF9A00
+}
+.bgH{
+  background:#FFF4E3;
+}

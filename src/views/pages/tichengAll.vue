@@ -1,15 +1,21 @@
 /**
  * 
  * @author: liptpb
- * @date: 2020-08-20 
+ * @date: 2020-08-24
+ *  提成组件
  */
 <template>
-  <div class=''></div>
+  <div>
+     <deductComp></deductComp>
+  </div>
 </template>
 
 <script>
+import deductComp from '@/components/deductComp'
 export default {
-  components: {},
+  components: {
+    deductComp
+  },
   data() {
     return {
 

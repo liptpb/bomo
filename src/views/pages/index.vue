@@ -34,7 +34,7 @@
            </div>
            <div class='yuyuwboxday'>
               <div class='yuyuwboxdayleft'>
-                 今日/明日/全部
+                 <span class="borderBottom">今日</span>/<span>明日</span>/<span>全部</span>
               </div>
               <div class='yuyuwboxdayright'>
                  预约
@@ -51,7 +51,7 @@
                    服务项目：<span>全身深度中医推拿</span>
                 </div>
                </div> 
-               <div class='zhenduan'>查看诊断</div>
+               <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
              </div>
              <div class="border"></div>
            </div>
@@ -88,12 +88,12 @@
          </div>
       </div>
       <div class="login-btn">
-         <van-button color="#FF9900" :round="true" size="large">查看诊断</van-button>
+         <van-button color="#FF9900" :round="true" size="large" @click="seeFunction()">查看诊断</van-button>
       </div>
       <div class='ticheng'>
         <div class="flexJue bgH name">
             <div class="colorH">项目/产品/充卡</div>
-            <div class='yuyuwboxAllright colorH'>
+            <div class='yuyuwboxAllright colorH' v-on:click="tichengFunction()">
               全部提成
               <van-icon name="arrow" color="#FF9A00" />
             </div>
@@ -177,7 +177,12 @@ export default {
 
   },
   methods: {
-
+    tichengFunction(){
+      this.$router.push({ path:'/index/tichengAll'  })
+    },
+    seeFunction(id){
+      this.$router.push({ path:'/index/otherSee'  })
+    }
   },
   created() {
 
@@ -188,18 +193,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.flexJue{
-    display: flex;
-    justify-content: space-between;
-    align-content: space-between;  
-    flex-wrap: wrap;
-}
-.colorH{
-    color:#FF9A00
-}
-.bgH{
-    background:#FFF4E3;
-}
+
 .indexAll{
   .indextop{
     //  width:750px;
@@ -303,9 +297,18 @@ export default {
                 font-size:28px;
                 font-family:PingFang SC;
                 font-weight:bold;
-                color:rgba(255,154,0,1);
+                // color:rgba(255,154,0,1);
                 line-height:58px;
                 vertical-align: middle;
+                span{
+                    display:inline-block;
+                    width: 70px;
+                    text-align: center;
+                }
+                .borderBottom{
+                    border-bottom: 2PX solid #FF9A00;
+                    color:rgba(255,154,0,1);
+                }
             }
             .yuyuwboxdayright{
               width:143px;
