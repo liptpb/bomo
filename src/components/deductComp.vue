@@ -5,88 +5,33 @@
  */
 <template>
   <div class=''>
-      <div class='ticheng'>
-        <div class="flexJue bgH name">
-            <div class="colorH">项目/产品/充卡</div>
-            <div class='yuyuwboxAllright colorH' v-on:click="tichengFunction()">
-              全部提成
-              <van-icon name="arrow" color="#FF9A00" />
-            </div>
-        </div>
-        <div class="cont">
+        <div class="cont" v-for="(item, index) in tclistArray" :key="index">
             <div class="flexJue">
-               <div class="">小儿综合调理</div>
+               <div class="">{{item.name}}</div>
                 <div class='yuyuwboxAllright'>
-                20元
+                {{item.tcmoney}}元
                 </div>
              </div>
-            <div class="time">2020-06-26 11:32</div>
+            <div class="time">{{item.time}}</div>
         </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-       </div>
+        <noData mess="今日无提成项目" v-show="tclistArray.length<1"></noData>
   </div>
 </template>
 
 <script>
+import noData from '@/components/noData'
 export default {
-  components: {},
+  components: {noData},
   data() {
     return {
-
+      tclistArray: []
     };
+  },
+  props: {
+    tclist: {
+        type: Array,                
+        default: []     
+    }
   },
   mounted() {
 
@@ -97,8 +42,13 @@ export default {
   created() {
 
   },
-  computed: {},
-  watch: {},
+  computed: {
+  },
+  watch: {
+    tclist(val) {
+      this.tclistArray = val;
+    }
+  },
 }
 </script>
 
@@ -116,7 +66,7 @@ export default {
   background:#FFF4E3;
 }
 .ticheng{
-      margin-top: 30px;
+      // margin-top: 30px;
       .name{
           height:78px;
           line-height: 78px;

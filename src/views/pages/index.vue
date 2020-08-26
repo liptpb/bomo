@@ -9,16 +9,16 @@
       <div class='indextop'>
           <div class="topinfo">
             <div class='indextopName'>
-             你好，周老师(Annal）
+             你好，{{info.empName}}({{info.nickName}})
             </div>
-            <div class='indextopInfo'>13155667788</div>
+            <div class='indextopInfo'>{{info.mobile}}</div>
             <div class='indextopbottom'>
-                <div>2020-06-25 星期四</div>
-                <div>今日收入<span>598</span>元</div>
+                <div>{{info.data}} {{info.week}}</div>
+                <div>今日收入<span>{{info.jrsr}}</span>元</div>
             </div>
           </div>
           <div class='imgBox'>
-              <img src="../../assets/7.png"  alt="" />
+              <img :src="info.picUrl"  alt="" />
           </div>
       </div>
       <div class="yuyue">
@@ -29,61 +29,72 @@
               </div>
               <div class='yuyuwboxAllright'>
                 全部订单
-                <van-icon name="arrow" color="#FF9A00" />
+                <van-icon name="arrow" color="#FF9A00" @click="itemsInfo()" />
               </div>
            </div>
            <div class='yuyuwboxday'>
               <div class='yuyuwboxdayleft'>
-                 <span class="borderBottom">今日</span>/<span>明日</span>/<span>全部</span>
+                 <span @click="tabName('d')" :class="{'borderBottom':yuyue=='d'}">今日</span>/
+                 <span @click="tabName('m')" :class="{'borderBottom':yuyue=='m'}">明日</span>/
+                 <span @click="tabName('all')" :class="{'borderBottom':yuyue=='all'}">全部</span>
               </div>
               <div class='yuyuwboxdayright'>
                  预约
               </div>
            </div>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName">李子柒</div>
-             <div class="infoboxInfo">
-               <div class='infona'>
-                <div class="infotime">
-                    服务时间：<span>202020</span>
+           <div v-show="yuyue=='d'">
+              <div class='yuyuwboxInfo' v-for="(item, index) in todayList" :key="index">
+                <div class="infoName">{{item.cusName}}</div>
+                <div class="infoboxInfo">
+                  <div class='infona'>
+                   <div class="infotime">
+                    服务时间：<span>{{item.apptEnd}}</span>
+                   </div>
+                   <div class='infotime'>
+                    服务项目：<span>{{item.itemName}}</span>
+                   </div>
+                  </div> 
+                  <div class='zhenduan'>查看诊断</div>
                 </div>
-                <div class='infotime'>
-                   服务项目：<span>全身深度中医推拿</span>
-                </div>
-               </div> 
-               <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
-             </div>
-             <div class="border"></div>
+                <div class="border" v-if='index < todayList.length-1'></div>
+              </div>
+              <noData mess="今日无服务项目" v-show="todayList.length<1"></noData>
            </div>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName">李子柒</div>
-             <div class="infoboxInfo">
-               <div class='infona'>
-                <div class="infotime">
-                    服务时间：<span>202020</span>
+           <div v-show="yuyue=='m'">
+              <div class='yuyuwboxInfo' v-for="(item, index) in tomList" :key="index">
+                <div class="infoName">{{item.cusName}}</div>
+                <div class="infoboxInfo">
+                  <div class='infona'>
+                   <div class="infotime">
+                    服务时间：<span>{{item.apptEnd}}</span>
+                   </div>
+                   <div class='infotime'>
+                    服务项目：<span>{{item.itemName}}</span>
+                   </div>
+                  </div> 
+                  <div class='zhenduan'>查看诊断</div>
                 </div>
-                <div class='infotime'>
-                   服务项目：<span>全身深度中医推拿</span>
-                </div>
-               </div> 
-               <div class='zhenduan'>查看诊断</div>
-             </div>
-             <div class="border"></div>
+                <div class="border" v-if='index < tomList.length-1'></div>
+              </div>
+              <noData mess="明日无服务项目" v-show="tomList.length<1"></noData>
            </div>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName">李子柒</div>
-             <div class="infoboxInfo">
-               <div class='infona'>
-                <div class="infotime">
-                    服务时间：<span>202020</span>
+           <div v-show="yuyue=='all'">
+              <div class='yuyuwboxInfo' v-for="(item, index) in apptList" :key="index">
+                <div class="infoName">{{item.cusName}}</div>
+                <div class="infoboxInfo">
+                  <div class='infona'>
+                   <div class="infotime">
+                    服务时间：<span>{{item.apptEnd}}</span>
+                   </div>
+                   <div class='infotime'>
+                    服务项目：<span>{{item.itemName}}</span>
+                   </div>
+                  </div> 
+                  <div class='zhenduan'>查看诊断</div>
                 </div>
-                <div class='infotime'>
-                   服务项目：<span>全身深度中医推拿</span>
-                </div>
-               </div> 
-               <div class='zhenduan'>查看诊断</div>
-             </div>
-             <div class="border"></div>
+                <div class="border" v-if='index < apptList.length -1 '></div>
+              </div>
+              <noData mess="无服务项目" v-show="apptList.length<1"></noData>
            </div>
          </div>
       </div>
@@ -98,94 +109,61 @@
               <van-icon name="arrow" color="#FF9A00" />
             </div>
         </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-        <div class="cont">
-            <div class="flexJue">
-               <div class="">小儿综合调理</div>
-                <div class='yuyuwboxAllright'>
-                20元
-                </div>
-             </div>
-            <div class="time">2020-06-26 11:32</div>
-        </div>
-       </div>
+        <deductComp :tclist = "tclist"></deductComp>
+      </div>
   </div>
 </template>
-
 <script>
+import deductComp from '@/components/deductComp'
+import noData from '@/components/noData'
 export default {
-  components: {},
+  components: {
+    deductComp,
+    noData
+  },
   data() {
     return {
+      info: {
 
+      },
+      tclist: Array,
+      yuyue: 'd' ,//预约
+      todayList: [],
+      tomList: [],
+      apptList: [],
     };
   },
   mounted() {
-
+  
   },
   methods: {
+    tabName(val){
+      this.yuyue = val
+    },
+    itemsInfo(){
+      this.$router.push({ path:'/serviceAll' ,query: {
+      cusId: '43'
+      } })
+    },
     tichengFunction(){
-      this.$router.push({ path:'/index/tichengAll'  })
+      this.$router.push({ path:'/tichengAll'  })
     },
     seeFunction(id){
-      this.$router.push({ path:'/index/otherSee'  })
+      this.$router.push({ path:'/otherSee'  })
     }
   },
   created() {
-
+    this.$get(this.HOST + '/index', {
+       
+      }).then((res) =>{
+          this.info = res
+          this.tclist = res.tclist
+          this.todayList = res.todayList
+          this.tomList = res.tomList
+          this.apptList = res.apptList
+        }).catch(function (error) {
+            console.log(error);
+        });
   },
   computed: {},
   watch: {},
@@ -254,6 +232,7 @@ export default {
          img{
              width: 100%;
              height: 100%;
+             border-radius: 50%;
          }
      }
   }
@@ -377,6 +356,7 @@ export default {
   }
   .login-btn {
     margin-top: 47px;
+    margin-bottom: 47px;
     padding: 0 24px;
     /deep/ .van-button{
         height:86px;
@@ -389,7 +369,7 @@ export default {
     }
   }
   .ticheng{
-      margin-top: 30px;
+      // margin-top: 30px;
       .name{
           height:78px;
           line-height: 78px;

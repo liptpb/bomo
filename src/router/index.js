@@ -26,6 +26,15 @@ const router = new Router({
       children: [
         ...routerList,
       ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: _import('login/Login'),
+      meta: {
+        title: '登录',
+        tree: 0
+      }
     }
   ]
 })

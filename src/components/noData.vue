@@ -1,0 +1,68 @@
+/**
+ * 
+ * @author: liptpb
+ * @date: 2020-08-26 
+ */
+<template>
+  <div class='nodata'>
+      	<div class="container">
+		<div class="icon"></div>
+		<p>{{mess}}</p>
+	</div>
+  </div>
+</template>
+
+<script>
+export default {
+  components: {},
+  data() {
+    return {
+
+    };
+  },
+  props: {
+    mess: {
+        type: String,                
+        default: '暂时没有信息!'    
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+
+  },
+  created() {
+
+  },
+  computed: {},
+  watch: {},
+}
+</script>
+
+<style lang='less' scoped>
+.nodata{
+    .container{
+			width:100%;
+			min-height: 150px;
+            background-color:transparent;
+            text-align: center;
+            margin-top: 30px;
+            .icon{
+			width:50px;
+			height:50px;
+			background-image: url("../assets/logo.png");
+			-webkit-background-size: 100% 100%;
+			background-size: 100% 100%;
+			margin: 30px auto 10px;
+		}
+		p{
+			font-size:24px;
+            font-family:PingFang SC;
+            font-weight:bold;
+            color:rgba(52,52,52,1);
+		}
+		}
+		
+}
+</style>

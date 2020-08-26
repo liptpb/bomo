@@ -7,72 +7,29 @@
   <div class='indexAll'>
       <div class="yuyue">
          <div class='yuyuwbox'>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName flexJue">
-                 <div>李子柒</div>
+           <div class='yuyuwboxInfo' v-for="(item, index) in items" :key="index">
+             <div class="infoName flexJue" >
+                 <div>{{item.cusName}}</div>
                  <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
              </div>
              <div class="infoboxInfo">
                <div class='infona'>
                 <div class="infotime">
-                    服务时间：<span>202020</span>
+                    服务时间：<span>{{item.itemOrderTime}}</span>
                 </div>
                 <div class='infotime flexJue'>
-                   <div>服务项目：<span>全身深度中医推拿</span></div>
-                   <div class="colorH">x1</div>
+                   <div>服务项目：<span>{{item.itemName}}</span></div>
+                   <div class="colorH">x{{item.quantity}}</div>
                 </div>
                </div> 
              </div>
              <div class='mony flexJue'>
-                   <p>提成￥<span>98.00</span></p>
-                   <div class='fankui'>效果反馈</div>
+                   <p>提成￥<span>{{item.money}}</span></p>
+                   <div class='fankui' v-if="item.feedback =='0'">效果反馈</div>
              </div>
-             <div class="border"></div>
+             <div class="border" v-if='index < items.length-1'></div>
            </div>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName flexJue">
-                 <div>李子柒</div>
-                 <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
-             </div>
-             <div class="infoboxInfo">
-               <div class='infona'>
-                <div class="infotime">
-                    服务时间：<span>202020</span>
-                </div>
-                <div class='infotime flexJue'>
-                   <div>服务项目：<span>全身深度中医推拿</span></div>
-                   <div class="colorH">x1</div>
-                </div>
-               </div> 
-             </div>
-             <div class='mony flexJue'>
-                   <p>提成￥<span>98.00</span></p>
-                   <div class='fankui'>效果反馈</div>
-             </div>
-             <div class="border"></div>
-           </div>
-           <div class='yuyuwboxInfo'>
-             <div class="infoName flexJue">
-                 <div>李子柒</div>
-                 <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
-             </div>
-             <div class="infoboxInfo">
-               <div class='infona'>
-                <div class="infotime">
-                    服务时间：<span>202020</span>
-                </div>
-                <div class='infotime flexJue'>
-                   <div>服务项目：<span>全身深度中医推拿</span></div>
-                   <div class="colorH">x1</div>
-                </div>
-               </div> 
-             </div>
-             <div class='mony flexJue'>
-                   <p>提成￥<span>98.00</span></p>
-                   <div class='fankui'>效果反馈</div>
-             </div>
-             <div class="border"></div>
-           </div>
+           <noData mess="无服务项目" v-show="items.length<1"></noData>
          </div>
       </div>
   </div>
@@ -83,11 +40,19 @@ export default {
   components: {},
   data() {
     return {
-
+      items: []
     };
   },
   mounted() {
-
+    let id = this.$route.query.cusId
+    this.$get(this.HOST + '/cbi/itemsbycus', {
+       
+      }).then((res) =>{
+          console.log(res)
+          this.items = res
+        }).catch(function (error) {
+            console.log(error);
+        });
   },
   methods: {
 

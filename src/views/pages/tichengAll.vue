@@ -5,8 +5,14 @@
  *  提成组件
  */
 <template>
-  <div>
-     <deductComp></deductComp>
+  <div class='ticheng'>
+     <div class="flexJue bgH name">
+        <div class="colorH">项目/产品/充卡</div>
+        <div class='yuyuwboxAllright colorH'>
+          提成
+        </div>
+      </div>
+     <deductComp :tclist = "tclist"></deductComp>
   </div>
 </template>
 
@@ -18,7 +24,7 @@ export default {
   },
   data() {
     return {
-
+      tclist: Array
     };
   },
   mounted() {
@@ -28,13 +34,46 @@ export default {
 
   },
   created() {
-
+   this.$get(this.HOST + '/index/tc?page=1', {
+       
+      }).then((res) =>{
+          this.tclist = res
+        }).catch(function (error) {
+            console.log(error);
+        });
   },
   computed: {},
   watch: {},
 }
 </script>
 
-<style scoped>
-
+<style scoped  lang='less'>
+.flexJue{
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;  
+  flex-wrap: wrap;
+}
+.colorH{
+  color:#FF9A00
+}
+.bgH{
+  background:#FFF4E3;
+}
+.ticheng{
+      // margin-top: 30px;
+      .name{
+          height:78px;
+          line-height: 78px;
+          font-size:28px;
+          font-weight:bold;
+          color:rgba(255,154,0,1);
+          padding: 0 24px;
+          .yuyuwboxAllright{
+            font-size:28px;
+            font-family:PingFang SC;
+            font-weight:bold;
+          }
+      }
+}
 </style>

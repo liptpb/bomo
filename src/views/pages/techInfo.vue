@@ -264,3 +264,34 @@
     font-size: 28px;
   }
 </style>
+<div class='yuyuwboxInfo'>
+             <div class="infoName">李子柒</div>
+             <div class="infoboxInfo">
+               <div class='infona'>
+                <div class="infotime">
+                    服务时间：<span>202020</span>
+                </div>
+                <div class='infotime'>
+                   服务项目：<span>全身深度中医推拿</span>
+                </div>
+               </div> 
+               <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
+             </div>
+             <div class="border"></div>
+           </div>
+           
+           <div class='yuyuwboxInfo'>
+             <div class="infoName">李子柒</div>
+             <div class="infoboxInfo">
+               <div class='infona'>
+                <div class="infotime">
+                    服务时间：<span>202020</span>
+                </div>
+                <div class='infotime'>
+                   服务项目：<span>全身深度中医推拿</span>
+                </div>
+               </div> 
+               <div class='zhenduan'>查看诊断</div>
+             </div>
+             <div class="border"></div>
+           </div>
