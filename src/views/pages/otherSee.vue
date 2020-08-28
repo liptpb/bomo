@@ -21,7 +21,7 @@
              </li>
              <li>会员级别: {{cusInfo.levelName}}  {{cusInfo.rate}}折</li>
              <li>电话: {{cusInfo.mobile}}</li>
-             <li>年龄: {{cusInfo.age}}岁</li>
+             <li>年龄: {{cusInfo.age}}</li>
              <li>开卡时间: {{cusInfo.kksj}}</li>
            </ul>
         </div>
@@ -128,7 +128,7 @@ export default {
    }
    .cusNameInfo{
      width:690px;
-      height:294px;
+      min-height:294px;
       background:rgba(255,255,255,1);
       border-radius:12px;
       font-size:24px;

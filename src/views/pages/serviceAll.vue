@@ -10,7 +10,7 @@
            <div class='yuyuwboxInfo' v-for="(item, index) in items" :key="index">
              <div class="infoName flexJue" >
                  <div>{{item.cusName}}</div>
-                 <div class='zhenduan' @click="seeFunction('1111')">查看诊断</div>
+                 <div class='zhenduan' @click="seeFunctionNum(item.consumer)">查看诊断</div>
              </div>
              <div class="infoboxInfo">
                <div class='infona'>
@@ -18,14 +18,14 @@
                     服务时间：<span>{{item.itemOrderTime}}</span>
                 </div>
                 <div class='infotime flexJue'>
-                   <div>服务项目：<span>{{item.itemName}}</span></div>
+                   <div>服务项目：<span>{{item.itemName}}</span></div> 
                    <div class="colorH">x{{item.quantity}}</div>
                 </div>
                </div> 
              </div>
              <div class='mony flexJue'>
                    <p>提成￥<span>{{item.money}}</span></p>
-                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.orderNo)">效果反馈</div>
+                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.consumer)">效果反馈</div>
              </div>
              <div class="border" v-if='index < items.length-1'></div>
            </div>
@@ -56,11 +56,17 @@ export default {
         });
   },
   methods: {
-    feedback(orderNo){
+    feedback(cusId){
+      debugger
       this.$router.push({ path:'/feedback' ,query: {
-      orderNo: orderNo
+      cusId: cusId
       } })
-    }
+    },
+     seeFunctionNum(cusId){
+      this.$router.push({ path:'/otherSee' ,query: {
+      cusId: cusId
+      }  })
+    },
   },
   created() {
 

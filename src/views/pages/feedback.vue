@@ -42,6 +42,7 @@
                 autosize
                 border="false"
                 height="150"
+                v-model="cont"
              />
          </van-cell-group>
        </div>
@@ -53,7 +54,7 @@
          </ul>
      </div>
     <div class="login-btn">
-        <van-button color="#FF9900" :round="true" size="large">提交反馈</van-button>
+        <van-button color="#FF9900" :round="true" size="large" @click="sumitClick()">提交反馈</van-button>
     </div>
   </div>
 </template>
@@ -63,14 +64,29 @@ export default {
   components: {},
   data() {
     return {
-
+      cont: ''
     };
   },
   mounted() {
 
   },
   methods: {
-
+    sumitClick(){
+    let id = this.$route.query.cusId
+    let data = {
+     'cusId' : id ,
+     'cont' : this.cont
+    }
+    console.log(data)
+    // let data1 = JSON.parse(data)
+    this.$post(this.HOST + '/cbi/feekback', {cusId:id, cont: this.cont}).then((res) =>{
+          console.log(res)
+          // this.$Toast('反馈成功');
+          this.$router.push({ path:'/serviceAll' })
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
   },
   created() {
 

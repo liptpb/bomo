@@ -27,9 +27,9 @@
               <div class='yuyuwboxAllleft'>
                 待服务
               </div>
-              <div class='yuyuwboxAllright'>
+              <div class='yuyuwboxAllright' >
                 全部订单
-                <van-icon name="arrow" color="#FF9A00" @click="itemsInfo()" />
+                <van-icon name="arrow" color="#FF9A00" @click="itemsInfo()" style="vertical-align: middle;"/>
               </div>
            </div>
            <div class='yuyuwboxday'>
@@ -106,7 +106,7 @@
             <div class="colorH">项目/产品/充卡</div>
             <div class='yuyuwboxAllright colorH' v-on:click="tichengFunction()">
               全部提成
-              <van-icon name="arrow" color="#FF9A00" />
+              <van-icon name="arrow" color="#FF9A00" style="vertical-align: middle;"/>
             </div>
         </div>
         <deductComp :tclist = "tclist"></deductComp>
@@ -152,8 +152,9 @@ export default {
       this.$router.push({ path:'/otherSee'  })
     },
      seeFunctionNum(cusId){
+       debugger
       this.$router.push({ path:'/otherSee' ,query: {
-      cusId: '43'
+      cusId: cusId
       }  })
     },
     appoint(){
@@ -185,7 +186,7 @@ export default {
   .indextop{
     //  width:750px;
      width:100% ;
-     height:318px;
+     min-height:318px;
      background:linear-gradient(-90deg,#FF9A00,#FF9A00);  
      .topinfo{
          padding: 24px;

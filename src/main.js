@@ -7,7 +7,9 @@ import router from './router'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 Vue.use(Vant)
+import { Toast } from 'vant';
 
+Vue.use(Toast)
 import { VueAxios } from './utils/request'
 Vue.use(VueAxios)
 
@@ -24,7 +26,7 @@ import Axios from 'axios'
 Vue.prototype.$axios = Axios
 Vue.prototype.HOST = '/api' //全局定义
 
-import {post,get} from './api/http'
+import {post,get} from '@/api/http'
 //定义全局变量
 Vue.prototype.$post = post;
 Vue.prototype.$get = get;
@@ -39,13 +41,18 @@ Axios.defaults.baseURL ='';
 Axios.interceptors.request.use(
   config => {
     if(config.url!='/login'){ //登录页面不验证token
-      let token = localStorage.getItem('userToken')
-      token = token.replace(/\"/g, "")
+      // let id = this.$route.params
+      // console.log(id)
+      let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ'
+      // token = token.replace(/\"/g, "")
       console.log(token)
       if (token) {
        config.headers.etoken = `${token}`;
-       config.headers['content-type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+       config.headers['content-type'] = 'application/json;charset=UTF-8';
       }
+      // if(config.method == 'post') {
+      //   config.Accept = 'application/json'
+      // }
       console.log(config)
     }
     return config;
