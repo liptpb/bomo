@@ -38,7 +38,7 @@
                  <span @click="tabName('m')" :class="{'borderBottom':yuyue=='m'}">明日</span>/
                  <span @click="tabName('all')" :class="{'borderBottom':yuyue=='all'}">全部</span>
               </div>
-              <div class='yuyuwboxdayright'>
+              <div class='yuyuwboxdayright' @click="appoint()">
                  预约
               </div>
            </div>
@@ -90,7 +90,7 @@
                     服务项目：<span>{{item.itemName}}</span>
                    </div>
                   </div> 
-                  <div class='zhenduan'>查看诊断</div>
+                  <div class='zhenduan' @click="seeFunctionNum(item.cusId)">查看诊断</div>
                 </div>
                 <div class="border" v-if='index < apptList.length -1 '></div>
               </div>
@@ -150,9 +150,18 @@ export default {
     },
     seeFunction(id){
       this.$router.push({ path:'/otherSee'  })
+    },
+     seeFunctionNum(cusId){
+      this.$router.push({ path:'/otherSee' ,query: {
+      cusId: '43'
+      }  })
+    },
+    appoint(){
+       this.$router.push({ path:'/appoint'  })
     }
   },
   created() {
+    console.log(this.HOST)
     this.$get(this.HOST + '/index', {
        
       }).then((res) =>{

@@ -16,13 +16,13 @@
         <div class='cusNameInfo'>
            <ul>
              <li class="flexJue">
-               <p>顾客编号: 23659865</p>
-               <p>顾客:333333</p>
+               <p>顾客编号: {{cusInfo.cusCode}}</p>
+               <p>顾客:{{cusInfo.cusName}}</p>
              </li>
-             <li>会员级别: 白金会员 0.88折</li>
-             <li>电话: 13856896986</li>
-             <li>年龄: 35岁</li>
-             <li>开卡时间: 2020-07-18</li>
+             <li>会员级别: {{cusInfo.levelName}}  {{cusInfo.rate}}折</li>
+             <li>电话: {{cusInfo.mobile}}</li>
+             <li>年龄: {{cusInfo.age}}岁</li>
+             <li>开卡时间: {{cusInfo.kksj}}</li>
            </ul>
         </div>
         <div class='tabName'>
@@ -32,159 +32,76 @@
           <div v-bind:class="{ active: !tabShow }"  @click="tabName('b')"><span>效果反馈</span></div>
         </div>
         <div class='zhenduan' v-show="!tabShow">
-          <div>
+          <div v-for="(item, index) in fbs" :key="index">
              <div class='zhenduanbox'>
               <ul>
                  <li>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
+                   {{item.cont}}
                 </li>
               </ul>
             </div>
             <div class='hr'></div>
             <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
+                <p>治疗师：{{item.empName}} 
+                <p>{{item.createTimeStr}}</p>
             </div>
             <div class="border"></div>
           </div>
-          <div>
-             <div class='zhenduanbox'>
-              <ul>
-                 <li>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
-                </li>
-              </ul>
-            </div>
-            <div class='hr'></div>
-            <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
-            </div>
-            <div class="border"></div>
-          </div>
-          <div>
-             <div class='zhenduanbox'>
-              <ul>
-                 <li>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本
-                </li>
-              </ul>
-            </div>
-            <div class='hr'></div>
-            <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
-            </div>
-            <div class="border"></div>
-          </div>
+          <noData mess="无反馈效果记录" v-show="fbs.length<1"></noData>
         </div>
         <div class='zhenduan' v-show="tabShow">
-          <div>
+          <div v-for="(item, index) in imps" :key="index">
              <div class='zhenduanbox'>
               <ul>
                  <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
+                 {{item.disease}}</li>
+                 <li><span class='colorH'>面诊：</span>
+                 {{item.mianz}}</li>
+                 <li><span class='colorH'>舌诊：</span>
+                 {{item.shez}}</li>
+                 <li><span class='colorH'>手诊：</span>
+                 {{item.shouz}}</li>
+                 <li><span class='colorH'>脉诊：</span>
+                 {{item.maiz}}</li>
               </ul>
             </div>
             <div class='hr'></div>
             <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
+                <p>治疗师：{{item.zlsName}} 跟诊：{{item.zdsName}}</p>
+                <p>{{item.zdTime}}</p>
             </div>
             <div class="border"></div>
           </div>
-          <div>
-             <div class='zhenduanbox'>
-              <ul>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-              </ul>
-            </div>
-            <div class='hr'></div>
-            <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
-            </div>
-            <div class="border"></div>
-          </div>
-          <div>
-             <div class='zhenduanbox'>
-              <ul>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-              </ul>
-            </div>
-            <div class='hr'></div>
-            <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
-            </div>
-            <div class="border"></div>
-          </div>
-          <div>
-             <div class='zhenduanbox'>
-              <ul>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-                 <li><span class='colorH'>自述：</span>
-                 五年前的一天，我感觉到左侧面眼皮上，防止跳动 可是根本就没用！后来可是根本就没用，后来，可是根本</li>
-              </ul>
-            </div>
-            <div class='hr'></div>
-            <div class='flexJue'>
-                <p>治疗师：周康 跟诊：郑娥</p>
-                <p>2020-08-18 12:23:20</p>
-            </div>
-            <div class="border"></div>
-          </div>
-        </div>
+          <noData mess="无诊断记录" v-show="imps.length<1"></noData>
+        </div>  
      </div>
   </div>
 </template>
 
 <script>
+ import noData from '@/components/noData'
 export default {
-  components: {},
+  components: {noData},
   data() {
     return {
-     tabShow: true
+     tabShow: true,
+     cusInfo: {},
+     imps: [],
+     fbs: [],
     };
   },
   mounted() {
-
+    let id = this.$route.query.cusId
+    this.$get(this.HOST + '/cbi/' + id, {
+       
+      }).then((res) =>{
+          console.log(res)
+          this.cusInfo = res
+          this.fbs = res.fbs
+          this.imps = res.imps
+        }).catch(function (error) {
+            console.log(error);
+        });
   },
   methods: {
     tabName(id){

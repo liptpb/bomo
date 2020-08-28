@@ -47,20 +47,22 @@ export default {
 			min-height: 150px;
             background-color:transparent;
             text-align: center;
-            margin-top: 30px;
+            padding-bottom: 20px;
             .icon{
-			width:50px;
-			height:50px;
-			background-image: url("../assets/logo.png");
+			width:60px;
+			height:80px;
+			background-image: url("../assets/0.png");
 			-webkit-background-size: 100% 100%;
 			background-size: 100% 100%;
-			margin: 30px auto 10px;
+			    text-align: center;
+    display: inline-block;
+    margin-top: 23px;
 		}
 		p{
 			font-size:24px;
             font-family:PingFang SC;
-            font-weight:bold;
-            color:rgba(52,52,52,1);
+            font-weight: 500;
+    color: #aaaaaa;
 		}
 		}
 		

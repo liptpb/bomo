@@ -25,7 +25,7 @@
              </div>
              <div class='mony flexJue'>
                    <p>提成￥<span>{{item.money}}</span></p>
-                   <div class='fankui' v-if="item.feedback =='0'">效果反馈</div>
+                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.orderNo)">效果反馈</div>
              </div>
              <div class="border" v-if='index < items.length-1'></div>
            </div>
@@ -36,8 +36,9 @@
 </template>
 
 <script>
+import noData from '@/components/noData'
 export default {
-  components: {},
+  components: {noData},
   data() {
     return {
       items: []
@@ -55,7 +56,11 @@ export default {
         });
   },
   methods: {
-
+    feedback(orderNo){
+      this.$router.push({ path:'/feedback' ,query: {
+      orderNo: orderNo
+      } })
+    }
   },
   created() {
 

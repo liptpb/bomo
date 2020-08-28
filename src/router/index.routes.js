@@ -4,7 +4,7 @@
 export default [
     {
         path: '/index',
-        name: 'Index',
+        name: 'index',
         component: _import('pages/index'),
         meta: {
           title: '首页',
@@ -36,6 +36,24 @@ export default [
             component: _import('pages/serviceAll'),
             meta: {
               title: '全部服务',
+              tree: 0
+            },
+          },
+          {
+            path: 'feedback',
+            name: 'feedback',
+            component: _import('pages/feedback'),
+            meta: {
+              title: '效果反馈',
+              tree: 0
+            },
+          },
+          {
+            path: 'appoint',
+            name: 'appoint',
+            component: _import('pages/appoint'),
+            meta: {
+              title: '预约',
               tree: 0
             },
           }
