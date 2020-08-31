@@ -25,7 +25,7 @@
              </div>
              <div class='mony flexJue'>
                    <p>提成￥<span>{{item.money}}</span></p>
-                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.consumer)">效果反馈</div>
+                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.consumer, item.empid, item.itemOrderTime)">效果反馈</div>
              </div>
              <div class="border" v-if='index < items.length-1'></div>
            </div>
@@ -56,10 +56,11 @@ export default {
         });
   },
   methods: {
-    feedback(cusId){
-      debugger
+    feedback(cusId, empid, data){
       this.$router.push({ path:'/feedback' ,query: {
-      cusId: cusId
+      cusid: cusId,
+      empid: '43',
+      date : data ? data.trim().split(/\s+/)[0] : ''
       } })
     },
      seeFunctionNum(cusId){

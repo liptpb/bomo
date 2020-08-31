@@ -7,9 +7,8 @@ import router from './router'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 Vue.use(Vant)
-import { Toast } from 'vant';
-
-Vue.use(Toast)
+import { Toast } from "vant";
+Vue.use(Toast); 
 import { VueAxios } from './utils/request'
 Vue.use(VueAxios)
 

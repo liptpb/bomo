@@ -28,7 +28,6 @@ export function get(url, params={}, headers={}){
  */
 
  export function post(url, data = {}){
-    debugger
     return new Promise((resolve, reject) => {
     this.$axios.post(url, data)
      .then(response => {

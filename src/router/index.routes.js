@@ -56,6 +56,15 @@ export default [
               title: '预约',
               tree: 0
             },
+          },
+          {
+            path: 'search',
+            name: 'search',
+            component: _import('pages/search'),
+            meta: {
+              title: '搜索',
+              tree: 0
+            },
           }
         // ]
  

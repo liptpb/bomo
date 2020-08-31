@@ -8,24 +8,14 @@
      <div class='feedback_top'> 
         <div>
           <ul>
-             <li>顾客：<span>周树人</span></li>
-             <li>服务日期：<span>8月22日 上午</span></li>
+             <li>顾客：<span>{{items[0].cusName}}</span></li>
+             <li>服务日期：<span>{{items[0].date}}</span></li>
              <li class='itemInfo'><p>服务项目：</p>
                  <table>
-                     <tr>
-                         <td>3333333</td>
-                         <td>3</td>
-                         <td>郑老师</td>
-                     </tr>
-                     <tr>
-                         <td>3333333</td>
-                         <td>3</td>
-                         <td>郑老师</td>
-                     </tr>
-                     <tr>
-                         <td>3333333</td>
-                         <td>3</td>
-                         <td>郑老师</td>
+                     <tr v-for="(item, index) in items" :key="index">
+                         <td>{{item.itemName}}</td>
+                         <td>{{item.quantityUse}}</td>
+                         <td>{{item.fuwu}}</td>
                      </tr>
                  </table>
              </li>
@@ -64,11 +54,18 @@ export default {
   components: {},
   data() {
     return {
-      cont: ''
+      cont: '',
+      items: []
     };
   },
   mounted() {
-
+    let query = this.$route.query
+    this.$get(this.HOST + '/cbi/items', query).then((res) =>{
+          console.log(res)
+          this.items = res
+        }).catch(function (error) {
+            console.log(error);
+        });
   },
   methods: {
     sumitClick(){
@@ -81,10 +78,13 @@ export default {
     // let data1 = JSON.parse(data)
     this.$post(this.HOST + '/cbi/feekback', {cusId:id, cont: this.cont}).then((res) =>{
           console.log(res)
-          // this.$Toast('反馈成功');
-          this.$router.push({ path:'/serviceAll' })
-        }).catch(function (error) {
-            console.log(error);
+          // this.$toast('反馈成功')
+          this.$toast.success('反馈成功')
+          setTimeout(() => { 
+            this.$router.push({ path:'/serviceAll' })
+          }, 2000)
+        }).catch((error) => {
+           this.$toast('反馈失败,请联系管理员')
         });
     }
   },
@@ -101,7 +101,7 @@ export default {
     padding: 30px;
     .feedback_top{
         width:100%;
-        min-height:312px;
+        min-height:180px;
        
         background:rgba(255,255,255,1);
         border-radius:20px;
@@ -159,7 +159,18 @@ export default {
         }
     }
     .login-btn {
-      margin-top: 150px;
+    margin-top:150px;
+    margin-bottom: 47px;
+    padding: 0 24px;
+    /deep/ .van-button{
+        height:86px;
+        background:linear-gradient(259deg,rgba(249,62,70,1),rgba(239,24,110,1));
+        border-radius:43px;
+        font-size:36px;
+        font-family:PingFang SC;
+        font-weight:500;
+        color:rgba(255,255,255,1)
     }
+  }
 }
 </style>
