@@ -6,6 +6,8 @@
  */
 <template>
   <div class='indexAll'>
+    <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <div class='indextop'>
           <div class="topinfo">
             <div class='indextopName'>
@@ -27,9 +29,9 @@
               <div class='yuyuwboxAllleft'>
                 待服务
               </div>
-              <div class='yuyuwboxAllright' >
+              <div class='yuyuwboxAllright' @click="itemsInfo()" >
                 全部订单
-                <van-icon name="arrow" color="#FF9A00" @click="itemsInfo()" style="vertical-align: middle;"/>
+                <van-icon name="arrow" color="#FF9A00" style="vertical-align: middle;"/>
               </div>
            </div>
            <div class='yuyuwboxday'>
@@ -43,63 +45,18 @@
               </div>
            </div>
            <div v-show="yuyue=='d'">
-              <div class='yuyuwboxInfo' v-for="(item, index) in todayList" :key="index">
-                <div class="infoName">{{item.cusName}}</div>
-                <div class="infoboxInfo">
-                  <div class='infona'>
-                   <div class="infotime">
-                    服务时间：<span>{{item.apptEnd}}</span>
-                   </div>
-                   <div class='infotime'>
-                    服务项目：<span>{{item.itemName}}</span>
-                   </div>
-                  </div> 
-                  <div class='zhenduan'>查看诊断</div>
-                </div>
-                <div class="border" v-if='index < todayList.length-1'></div>
-              </div>
-              <noData mess="今日无服务项目" v-show="todayList.length<1"></noData>
+              <serviceInfo :serviceInfoData = "todayList"></serviceInfo>
            </div>
            <div v-show="yuyue=='m'">
-              <div class='yuyuwboxInfo' v-for="(item, index) in tomList" :key="index">
-                <div class="infoName">{{item.cusName}}</div>
-                <div class="infoboxInfo">
-                  <div class='infona'>
-                   <div class="infotime">
-                    服务时间：<span>{{item.apptEnd}}</span>
-                   </div>
-                   <div class='infotime'>
-                    服务项目：<span>{{item.itemName}}</span>
-                   </div>
-                  </div> 
-                  <div class='zhenduan'>查看诊断</div>
-                </div>
-                <div class="border" v-if='index < tomList.length-1'></div>
-              </div>
-              <noData mess="明日无服务项目" v-show="tomList.length<1"></noData>
+              <serviceInfo :serviceInfoData = "tomList"></serviceInfo>
            </div>
            <div v-show="yuyue=='all'">
-              <div class='yuyuwboxInfo' v-for="(item, index) in apptList" :key="index">
-                <div class="infoName">{{item.cusName}}</div>
-                <div class="infoboxInfo">
-                  <div class='infona'>
-                   <div class="infotime">
-                    服务时间：<span>{{item.apptEnd}}</span>
-                   </div>
-                   <div class='infotime'>
-                    服务项目：<span>{{item.itemName}}</span>
-                   </div>
-                  </div> 
-                  <div class='zhenduan' @click="seeFunctionNum(item.cusId)">查看诊断</div>
-                </div>
-                <div class="border" v-if='index < apptList.length -1 '></div>
-              </div>
-              <noData mess="无服务项目" v-show="apptList.length<1"></noData>
+              <serviceInfo :serviceInfoData = "apptList"></serviceInfo>
            </div>
          </div>
       </div>
       <div class="login-btn">
-         <van-button color="#FF9900" :round="true" size="large" @click="seeFunction()">查看诊断</van-button>
+         <van-button color="#FF9900" :round="true" size="large" @click="seeFunctionNum()">查看诊断</van-button>
       </div>
       <div class='ticheng'>
         <div class="flexJue bgH name">
@@ -111,32 +68,103 @@
         </div>
         <deductComp :tclist = "tclist"></deductComp>
       </div>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 <script>
 import deductComp from '@/components/deductComp'
+import serviceInfo from '@/components/serviceInfo'
 import noData from '@/components/noData'
+import {formatDate} from '@/utils/index.js'
 export default {
   components: {
     deductComp,
-    noData
+    noData,
+    serviceInfo
   },
   data() {
     return {
       info: {
 
       },
-      tclist: Array,
+      tclist: [],
+      tclistAeeray:[],
       yuyue: 'd' ,//预约
       todayList: [],
       tomList: [],
       apptList: [],
+      refreshing: false, //加载完成后的提示文案
+      loading: false, //是否处于加载状态
+      finished: false, //是否已加载完成
     };
   },
   mounted() {
-  
+    this.infoData()
+  },
+  filters:{
+    formatDate(time){
+        var data = new Date(time);
+        return formatDate(data,'yyyy-MM-dd hh:mm:ss');
+    }
   },
   methods: {
+    infoData(){
+      this.loading = true;
+      this.$get(this.HOST + '/index', {
+       
+      }).then((res) =>{
+          this.loading = false;
+          this.info = res
+          this.tclistAeeray = res.tclist
+          this.tclist = this.tclist.concat(this.arrTrans(5,res.tclist)[0])
+          this.todayList = res.todayList
+          this.tomList = res.tomList
+          this.apptList = res.apptList
+        }).catch(function (error) {
+            
+        });
+    },
+    onRefresh() {
+      console.log('触发下拉刷新');
+      setTimeout(()=>{
+      if(this.refreshing ){
+          this.infoData()
+          this.refreshing = false;
+      }
+       this.loading = false;
+      },1000)
+    },
+    // 上拉加载
+    onLoad() {
+      console.log('触发上拉加载');
+      this.loading = true;
+      setTimeout(() => {
+      if(this.tclistAeeray.length>this.tclist.length){
+        let i=1
+        i++
+        this.tclist = this.tclist.concat(this.arrTrans(5,this.tclistAeeray)[i])
+        this.loading = false;
+      }else{
+        this.loading = false;
+        this.finished = true;
+      }
+      }, 1000);
+    },
+    arrTrans(num, arr) { 
+      if(arr.length<1){
+        return []
+      }
+      const iconsArr = []; 
+      arr.forEach((item, index) => {
+        const page = Math.floor(index / num);
+        if (!iconsArr[page]) { 
+          iconsArr[page] = [];
+        }
+        iconsArr[page].push(item);
+      });
+      return iconsArr;
+    },
     tabName(val){
       this.yuyue = val
     },
@@ -146,13 +174,14 @@ export default {
       } })
     },
     tichengFunction(){
-      this.$router.push({ path:'/tichengAll'  })
+      this.$router.push({ path:'/onRefresh'  })
     },
     seeFunction(id){
-      this.$router.push({ path:'/otherSee'  })
+      this.$router.push({ path:'/otherSee' ,query: {
+      cusId: id
+      }  })
     },
      seeFunctionNum(cusId){
-       debugger
       this.$router.push({ path:'/otherSee' ,query: {
       cusId: cusId
       }  })
@@ -162,18 +191,7 @@ export default {
     }
   },
   created() {
-    console.log(this.HOST)
-    this.$get(this.HOST + '/index', {
-       
-      }).then((res) =>{
-          this.info = res
-          this.tclist = res.tclist
-          this.todayList = res.todayList
-          this.tomList = res.tomList
-          this.apptList = res.apptList
-        }).catch(function (error) {
-            console.log(error);
-        });
+    
   },
   computed: {},
   watch: {},
@@ -254,7 +272,7 @@ export default {
     margin: -40px auto 0;
     z-index: 1000;
     .yuyuwbox{
-        padding: 33px 33px 0 33px;
+        padding: 33px;
         .yuyuwboxAll{
           display: flex;
           justify-content: space-between;
@@ -281,7 +299,7 @@ export default {
             justify-content: space-between;
             align-content: space-between;  
             flex-wrap: wrap; 
-            margin-top: 20px;
+            margin: 30px 0 30px 0;
            .yuyuwboxdayleft{
                 font-size:28px;
                 font-family:PingFang SC;
@@ -312,61 +330,11 @@ export default {
                 text-align: center;
             }
         }
-        .yuyuwboxInfo{
-            padding: 20px 0;
-            .infoName{
-                height:31px;
-                font-size:32px;
-                font-family:PingFang SC;
-                font-weight:bold;
-                color:rgba(52,52,52,1);
-                line-height:32px;
-                margin-bottom: 20px;
-            }
-            .infoboxInfo{
-               display: flex;
-               justify-content: space-between;
-               align-content: space-between;  
-               flex-wrap: wrap; 
-               .infona{
-                 .infotime{
-                        height:23px;
-                        line-height:32px;
-                        font-size:24px;
-                        font-family:PingFang SC;
-                        font-weight:bold;
-                        color:rgba(52,52,52,1);
-                        margin-bottom: 10px;
-                        span{
-                            color:rgba(255,154,0,1);
-                        }
-                 }
-               }
-               .zhenduan{
-                  width:143px;
-                height:56px;
-                border:2px solid rgba(255,154,0,1);
-                border-radius:10px; 
-                text-align: center;
-                line-height:56px;
-                font-size:26px;
-                font-family:PingFang SC;
-                font-weight:500;
-                color:rgba(255,153,0,1);
-               }
-            }
-            .border{
-                  width:620px;
-                    height:16px;
-                    margin-top: 20px;
-                    background:rgba(255,249,232,1); 
-               }
-         }
     }
   }
   .login-btn {
-    margin-top: 47px;
-    margin-bottom: 47px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     padding: 0 24px;
     /deep/ .van-button{
         height:86px;

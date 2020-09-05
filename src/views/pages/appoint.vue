@@ -8,8 +8,8 @@
       <div class='feedback_top'> 
         <div>
            <ul>
-               <li>顾客姓名</li>
-               <li><input type="text"  v-model="info.cusName" placeholder="请选择顾客姓名/手机/会员号" @click="onSearch('cus')" readonly='readonly'></li>
+               <li>会员姓名</li>
+               <li><input type="text"  v-model="info.cusName" placeholder="请选择会员姓名/手机/会员号" @click="onSearch('cus')" readonly='readonly'></li>
                <li>预约项目</li>
                <li><input type="text"  v-model="info.itemName" placeholder="请选择项目名" readonly='readonly' @click="onSearch('item')"></li>
                <li>预约老师</li>
@@ -38,8 +38,10 @@
 
 <script>
 import search from '@/components/search'
+import { Notify,Toast  } from 'vant';
+
 export default {
-  components: {search},
+  components: {search,Notify,Toast},
   data() {
     return {
       show: false,
@@ -72,15 +74,27 @@ export default {
   },
   methods: {
     cusappt(){
+      if(!this.info.cusId){
+        Notify({ type: 'warning', message: '请选择会员' });
+        return
+      }else if(!this.info.apptType){
+        Notify({ type: 'warning', message: '请选择预约方式' });
+        return
+      }else if(!this.info.apptBegin){
+        Notify({ type: 'warning', message: '请选择预约开始时间' });
+        return
+      }
       this.$post(this.HOST + '/cusappt', this.info).then((res) =>{
-          console.log(res)
-          // this.$toast('反馈成功')
-          this.$toast.success('预约成功')
+          Toast({
+            type: 'success',
+            message: '预约成功',
+            mask:true
+          });
           setTimeout(() => { 
             this.$router.push({ path:'/index' })
           }, 2000)
         }).catch((error) => {
-           this.$toast('预约失败,请联系管理员')
+           Toast.fail('预约失败,请联系管理员')
         });
     },
     onSearch(type){
@@ -178,6 +192,30 @@ export default {
 </script>
 
 <style lang='less' scoped>
+
+// /deep/  .van-picker__toolbar{
+//   height: 60px;
+//   line-height: 60px;
+//   font-size: 36px;
+//   font-weight: bold;
+// }
+// /deep/  .van-picker__cancel{
+//    font-size: 30px;
+// }
+// /deep/  .van-picker__confirm{
+//    font-size: 30px;
+// }
+// /deep/  .van-picker-column {
+//    font-size: 36px;
+// }
+// /deep/  .van-action-sheet__item {
+//     line-height: 40px;
+//     font-size: 30px;
+// }
+// /deep/  .van-action-sheet__cancel {
+//     line-height: 50px;
+//     font-size: 30px;
+// }
 .appoint{
     padding: 30px;
     .feedback_top{
@@ -201,6 +239,7 @@ export default {
                     background:rgba(244,244,244,1);
                     border-radius:9px;
                     padding-left: 30px;
+                    color: #343434;
                     &:-webkit-input-placeholder {
                       font-size:30px;
                       font-family:PingFang SC;
@@ -212,8 +251,8 @@ export default {
         }
     }
     .login-btn {
-    margin-top:150px;
-    margin-bottom: 47px;
+    margin-top:30px;
+    // margin-bottom: 47px;
     padding: 0 24px;
     /deep/ .van-button{
         height:86px;

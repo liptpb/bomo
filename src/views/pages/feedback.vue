@@ -50,8 +50,9 @@
 </template>
 
 <script>
+import { Notify,Toast  } from 'vant';
 export default {
-  components: {},
+  components: {Notify,Toast},
   data() {
     return {
       cont: '',
@@ -74,17 +75,22 @@ export default {
      'cusId' : id ,
      'cont' : this.cont
     }
-    console.log(data)
+    if(this.cont.length<=0){
+        Notify({ type: 'warning', message: '评论一下本次服务吧~' });
+        return
+    }
     // let data1 = JSON.parse(data)
     this.$post(this.HOST + '/cbi/feekback', {cusId:id, cont: this.cont}).then((res) =>{
-          console.log(res)
-          // this.$toast('反馈成功')
-          this.$toast.success('反馈成功')
+          Toast({
+            type: 'success',
+            message: '反馈成功',
+            mask:true
+          });
           setTimeout(() => { 
             this.$router.push({ path:'/serviceAll' })
           }, 2000)
         }).catch((error) => {
-           this.$toast('反馈失败,请联系管理员')
+          Toast.fail('反馈失败,请联系管理员')
         });
     }
   },
@@ -95,8 +101,8 @@ export default {
   watch: {},
 }
 </script>
-
 <style lang='less' scoped>
+
 .feedback{
     padding: 30px;
     .feedback_top{

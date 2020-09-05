@@ -7,11 +7,11 @@ import router from './router'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 Vue.use(Vant)
-import { Toast } from "vant";
-Vue.use(Toast); 
-import { VueAxios } from './utils/request'
-Vue.use(VueAxios)
-
+import { Toast ,Notify} from "vant";
+Vue.use(Toast,Notify); 
+// import { VueAxios } from './utils/request'
+// Vue.use(VueAxios)
+import qs from 'qs'
 Vue.config.productionTip = false
 
 // 软键盘弹出问题
@@ -40,11 +40,9 @@ Axios.defaults.baseURL ='';
 Axios.interceptors.request.use(
   config => {
     if(config.url!='/login'){ //登录页面不验证token
-      // let id = this.$route.params
-      // console.log(id)
-      let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ'
+      let token = localStorage.getItem('userToken');
+      // let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ'
       // token = token.replace(/\"/g, "")
-      console.log(token)
       if (token) {
        config.headers.etoken = `${token}`;
        config.headers['content-type'] = 'application/json;charset=UTF-8';
@@ -52,7 +50,6 @@ Axios.interceptors.request.use(
       // if(config.method == 'post') {
       //   config.Accept = 'application/json'
       // }
-      console.log(config)
     }
     return config;
   },
@@ -61,7 +58,12 @@ Axios.interceptors.request.use(
   });
 // 添加响应拦截器
 Axios.interceptors.response.use(function (response) {
-  if(response.status == 200){
+  if(response.data.code == 1001){
+    localStorage.clear()
+    router.push({
+      path: "/login",  //从哪个页面跳转
+    })
+  }else{
     return response.data
   }
 

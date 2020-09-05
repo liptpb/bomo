@@ -8,7 +8,8 @@ export default [
         component: _import('pages/index'),
         meta: {
           title: '首页',
-          tree: 0
+          tree: 0,
+          requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
         },
       },
         // children: [
@@ -63,6 +64,15 @@ export default [
             component: _import('pages/search'),
             meta: {
               title: '搜索',
+              tree: 0
+            },
+          },
+          {
+            path: 'onRefresh',
+            name: 'onRefresh',
+            component: _import('pages/onRefresh'),
+            meta: {
+              title: '全部提成',
               tree: 0
             },
           }

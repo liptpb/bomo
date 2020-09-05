@@ -5,6 +5,8 @@
  */
 <template>
   <div class='indexAll'>
+     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <div class="yuyue">
          <div class='yuyuwbox'>
            <div class='yuyuwboxInfo' v-for="(item, index) in items" :key="index">
@@ -32,38 +34,93 @@
            <noData mess="无服务项目" v-show="items.length<1"></noData>
          </div>
       </div>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script>
+import { Toast,Notify } from "vant";
 import noData from '@/components/noData'
 export default {
-  components: {noData},
+  components: {noData,Toast,Notify},
   data() {
     return {
-      items: []
+      items: [],
+      pagenum: 1, //当前页数
+      total: null, //总条数
+      loading: false, //是否处于加载状态
+      finished: false, //是否已加载完成
+      refreshing: false, //加载完成后的提示文案
+      cusId:'',
     };
   },
   mounted() {
-    let id = this.$route.query.cusId
-    this.$get(this.HOST + '/cbi/itemsbycus', {
-       
-      }).then((res) =>{
-          console.log(res)
-          this.items = res
-        }).catch(function (error) {
-            console.log(error);
-        });
+     let id = this.$route.query.cusId
+    this.getlist()
   },
   methods: {
+    getlist() {
+     
+      this.loading = true;
+      this.$get(this.HOST + '/cbi/itemsbycus?page='+ this.pagenum, {
+       
+      }).then((res) =>{
+          this.loading = false; // 加载状态结束
+          this.total = res.length;
+          this.items = this.items.concat(res)
+          this.refreshing = false;
+          this.pagenum += 1;
+        }).catch(function (error) {
+           
+        });
+    },
+    // 下拉刷新
+    onRefresh() {
+      console.log('触发下拉刷新');
+      setTimeout(()=>{
+      if(this.refreshing){
+          this.items = this.items;
+          this.refreshing = false;
+      }
+       this.loading = false;
+      },1000)
+    },
+    onLoad() {
+      console.log('触发上拉加载');
+      this.loading = true;
+      setTimeout(() => {
+      if(this.items.length<this.total ){
+        this.getlist();
+        this.loading = false;
+      }else{
+        this.loading = false;
+        this.finished = true;
+      }
+      }, 1000);
+    },
     feedback(cusId, empid, data){
+      if(!cusId){
+        Notify({ type: 'warning', message: '无项目信息!' });
+        return
+      }else if(!empid){
+        Notify({ type: 'warning', message: '无服务项目信息!' });
+        return
+      }else if(!data){
+        Notify({ type: 'warning', message: '无服务时间信息!' });
+        return
+      }
       this.$router.push({ path:'/feedback' ,query: {
       cusid: cusId,
-      empid: '43',
+      empid: empid,
       date : data ? data.trim().split(/\s+/)[0] : ''
       } })
     },
      seeFunctionNum(cusId){
+      if(!cusId){
+        Notify({ type: 'warning', message: '无会员信息!' });
+        return
+      }
       this.$router.push({ path:'/otherSee' ,query: {
       cusId: cusId
       }  })

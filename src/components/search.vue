@@ -1,7 +1,7 @@
 <template>
   <div class='saech'>
 		<!-- vant搜索 -->
-		<van-search @input="onInput" @change="onSearch" autofocus shape="round" v-model="kw" placeholder="输入搜索">
+		<van-search  @change="onSearch" autofocus shape="round" v-model="kw" placeholder="输入顾客姓名/手机号/会员编号/进行搜索">
 			<template #left>
 				<van-icon @click="searchTs()" style="margin-right: 5px;" size="22px" name="arrow-left" />
 			</template>
@@ -109,7 +109,7 @@ export default {
 				return
             }
             
-				this.$get(this.HOST + '/cusappt/'+this.searchtype+'?params='+this.kw+'&page=1',{}).then((res) =>{
+				this.$get(this.HOST + '/cusappt/'+this.searchtype+'?params='+this.kw+'&page=1&isDel=0',{}).then((res) =>{
 				if(this.searchtype == 'item'){
                   res = res.map(v=>{return {cusName: v.itemName,mobile:v.originalPrice,itemName: v.itemName,id:v.id}})
 				}
@@ -142,6 +142,11 @@ export default {
 </script>
 
 <style scoped lang='less' >
+// /deep/ .van-search .van-cell{
+// //   padding: 10px;
+//   height: 50px;
+//     line-height: 50px;
+// }
 .saech{
     position: relative;
     padding: 20px;

@@ -6,14 +6,18 @@
 <template>
   <div>
      <div class='indexAll'>
-        <div class='search'>
+        <div class='search'  @click="onSearch('cus')">
            <van-search
             shape="round"
             background="transparent"
-            placeholder="请输入搜索关键词"
+            placeholder="输入顾客姓名/手机号/会员编号/进行搜索"
           />
         </div>
-        <div class='cusNameInfo'>
+         <van-popup v-model="popupshow" position="right" :style="{ height: '100%',width:'100%'}">
+          <search :searchtype = 'search1' @getdata="receive" > </search>
+       </van-popup> 
+       <div v-if="cusId">
+        <div class='cusNameInfo' v-show="flexJue">
            <ul>
              <li class="flexJue">
                <p>顾客编号: {{cusInfo.cusCode}}</p>
@@ -25,13 +29,13 @@
              <li>开卡时间: {{cusInfo.kksj}}</li>
            </ul>
         </div>
-        <div class='tabName'>
+        <div class='tabName' v-show="flexJue">
           <div v-bind:class="{ active: tabShow }"  @click="tabName('a')">
              <span>诊断</span>
             </div>
           <div v-bind:class="{ active: !tabShow }"  @click="tabName('b')"><span>效果反馈</span></div>
         </div>
-        <div class='zhenduan' v-show="!tabShow">
+        <div class='zhenduan' v-show="!tabShow && flexJue">
           <div v-for="(item, index) in fbs" :key="index">
              <div class='zhenduanbox'>
               <ul>
@@ -49,7 +53,7 @@
           </div>
           <noData mess="无反馈效果记录" v-show="fbs.length<1"></noData>
         </div>
-        <div class='zhenduan' v-show="tabShow">
+        <div class='zhenduan' v-show="tabShow && flexJue">
           <div v-for="(item, index) in imps" :key="index">
              <div class='zhenduanbox'>
               <ul>
@@ -73,26 +77,50 @@
             <div class="border"></div>
           </div>
           <noData mess="无诊断记录" v-show="imps.length<1"></noData>
-        </div>  
+        </div>
+       </div>
+       <div v-else>
+         <noData mess="请搜索会员信息"></noData>
+       </div>  
      </div>
   </div>
 </template>
 
 <script>
+import search from '@/components/search'
  import noData from '@/components/noData'
 export default {
-  components: {noData},
+  components: {noData,search},
   data() {
     return {
      tabShow: true,
      cusInfo: {},
      imps: [],
      fbs: [],
+     popupshow: false,
+     search1: 'cus',
+     flexJue: true,
+     cusId:false
     };
   },
   mounted() {
     let id = this.$route.query.cusId
-    this.$get(this.HOST + '/cbi/' + id, {
+    if(id){
+      this.dataName(id)
+      this.cusId = true
+    }else{
+      this.cusId = false
+    }
+  },
+  methods: {
+    dataName(id){
+     if(!id){
+       this.flexJue = false
+       return
+     }else{
+      this.flexJue = true
+     }
+     this.$get(this.HOST + '/cbi/' + id, {
        
       }).then((res) =>{
           console.log(res)
@@ -102,14 +130,23 @@ export default {
         }).catch(function (error) {
             console.log(error);
         });
-  },
-  methods: {
+    },
     tabName(id){
       if(id=='a'){
         this.tabShow = true
       }else{
         this.tabShow = false
       }
+    },
+    onSearch(){
+      this.popupshow = true
+    },
+    receive(data){
+      if(data&&data.id){
+         this.dataName(data.id)
+         this.cusId = true
+      }
+      this.popupshow = false
     }
   },
   created() {
@@ -121,6 +158,11 @@ export default {
 </script>
 
 <style scoped lang='less'>
+// /deep/ .van-search .van-cell{
+// //   padding: 10px;
+//   height: 50px;
+//     line-height: 50px; 
+// }
 .indexAll{
    padding: 0 24px;
    .search{
@@ -138,13 +180,19 @@ export default {
       ul{
         padding: 40px 37px;
         li{
-          margin-top: 10px;
+          margin-top: 10px;         
+          
+            font-size: 24px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #343434;
         }
         .flexJue{
-          margin-top: 0;
-          font-size:32px;
-         font-weight:bold;
-         color:rgba(51,51,51,1);
+          
+          font-size: 32px;
+          font-family: PingFang SC;
+          font-weight: bold;
+          color: #343434;
         }
       }
    }
