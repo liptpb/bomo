@@ -14,7 +14,7 @@
              </div>
             <div class="time">{{item.time}}</div>
         </div>
-        <noData mess="今日无提成项目" v-show="tclistArray.length<1"></noData>
+        <noData mess="无数据" v-show="tclistArray.length<1"></noData>
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
   <div class='saech'>
 		<!-- vant搜索 -->
-		<van-search  @change="onSearch" autofocus shape="round" v-model="kw" placeholder="输入顾客姓名/手机号/会员编号/进行搜索">
+		<van-search  @change="onSearch" autofocus shape="round" v-model="kw"  :placeholder= placeholder>
 			<template #left>
-				<van-icon @click="searchTs()" style="margin-right: 5px;" size="22px" name="arrow-left" />
+				<van-icon @click="searchTs()" style="margin-right: -36px;" size="22px" name="arrow-left" />
 			</template>
 			<!-- <template #action>
 				<van-button @click="onSearch" size="small" type="danger" style="border-radius: 5px; font-size: 14px;">搜索</van-button>
@@ -47,6 +47,10 @@ export default {
 		searchtype: {
 			type: String,                
 			default:""     
+		},
+		placeholder:{
+			type: String,                
+			default:"请搜索" 
 		}
     },
 	created() { //初始化保存
@@ -56,16 +60,17 @@ export default {
 		}
 	},
 	mounted() {
-		// this.$axios.get('/search.json').then(res=>{
-		// 	// console.log(res.data.data)
-		// 	this.list = res.data.data
-        // })
-        // this.$get(this.HOST + '/cusappt/emp?params=张&page=1',{}).then((res) =>{
-        //   console.log(res)
-        //   this.list  = res
-        // }).catch(function (error) {
-        //     console.log(error);
-        // });
+		this.$get(this.HOST + '/cusappt/'+this.searchtype+'?params='+this.kw+'&page=1&isDel=0',{}).then((res) =>{
+		if(this.searchtype == 'item'){
+			res = res.map(v=>{return {cusName: v.itemName,mobile:v.originalPrice,itemName: v.itemName,id:v.id}})
+		}
+		if(this.searchtype == 'emp'){
+			res = res.map(v=>{return {cusName: v.empName,mobile:v.mobile,empName: v.empName,id:v.id}})
+		}
+		this.showList  = res
+		}).catch(function (error) {
+			console.log(error);
+		});
 	},
 	methods:{
 		back(){ //返回
@@ -137,23 +142,36 @@ export default {
 			  });
 		}
 		
+	},
+    watch:{
+      searchtype(val) {
+        
+      }
 	}
 }
 </script>
 
 <style scoped lang='less' >
-// /deep/ .van-search .van-cell{
-// //   padding: 10px;
-//   height: 50px;
-//     line-height: 50px;
-// }
+/deep/ .van-search__content{
+//   padding: 10px;
+  background:rgba(255,255,255,1);
+}
+/deep/ .van-search__content--round {
+    border-radius: 26.64rem;
+    background: rgba(255,255,255,1);
+}
+/deep/ .van-icon-arrow-left::before {
+     content: ''; 
+}
 .saech{
     position: relative;
-    padding: 20px;
+	padding: 30px 15px 15px 15px;
+	background-color: #F4F4F4;
    /deep/ .van-search{
-      width:690px;
+      width:600px;
         height:60px;
-        background:rgba(255,255,255,1);
+		// background:rgba(255,255,255,1);
+		background:#F4F4F4;
         border-radius:30px;
         margin: 0px auto;
     }

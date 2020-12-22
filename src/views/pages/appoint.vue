@@ -8,27 +8,31 @@
       <div class='feedback_top'> 
         <div>
            <ul>
-               <li>会员姓名</li>
-               <li><input type="text"  v-model="info.cusName" placeholder="请选择会员姓名/手机/会员号" @click="onSearch('cus')" readonly='readonly'></li>
+               <li>顾客姓名</li>
+               <li><input type="text"  v-model="info.cusName" placeholder="请选择顾客姓名/手机/会员号" @click="onSearch('cus','请选择顾客姓名/手机/顾客会员号')" readonly='readonly' ></li>
                <li>预约项目</li>
-               <li><input type="text"  v-model="info.itemName" placeholder="请选择项目名" readonly='readonly' @click="onSearch('item')"></li>
+               <li><input type="text"  v-model="info.itemName" placeholder="请选择项目名" readonly='readonly' @click="onSearch('item','请选择项目名')" ></li>
                <li>预约老师</li>
-               <li><input type="text"  v-model="info.empName" placeholder="请选择老师姓名/手机" readonly='readonly' @click="onSearch('emp')"></li>
+               <li><input type="text"  v-model="info.empName" placeholder="请选择老师姓名/手机" readonly='readonly' @click="onSearch('emp','请选择老师姓名/手机')" ></li>
                <li>预约方式</li>
-               <li><input type="text"  v-model="info.apptTypeName" placeholder="请选择预约方式" @click="onSearch('type')" readonly='readonly'></li>
+               <li><input type="text"  v-model="info.apptTypeName" placeholder="请选择预约方式" @click="onSearch('type')" readonly='readonly' ></li>
                <li>预约开始日期</li>
-               <li><input type="text" v-model="info.apptBegin" placeholder="请选择选择日期、时间" readonly='readonly' @click="onSearch('apptBegin')"></li>
-               <li>预约结束日期</li>
-               <li><input type="text" v-model="info.apptEnd" placeholder="请选择选择日期、时间" readonly='readonly' @click="onSearch('endBegin')"></li>
+               <li><input type="text" v-model="apptBegin1" placeholder="请选择选择日期、时间" readonly='readonly' @click="onSearch('apptBegin')" ></li>
+               <!-- <li>预约结束日期</li>
+               <li><input type="text" v-model="info.apptEnd" placeholder="请选择选择日期、时间" readonly='readonly' @click="onSearch('endBegin')" ></li> -->
            </ul>
         </div>
       </div>
        <van-action-sheet v-model="show" :actions="actions" cancel-text="取消" round @cancel="toCancel" @select="onSelect" />
-       <van-popup v-model="showTime" position="bottom" :style="{ height: '40%' }">
+       <!-- <van-popup v-model="showTime" position="bottom" :style="{ height: '40%' }" bind:close="onClose" closeable >
          <van-datetime-picker v-model="currentDate" type="datetime" @change="changeFn()" @confirm="confirmFn()" @cancel="cancelFn()" />
-       </van-popup>
-       <van-popup v-model="popupshow" position="right" :style="{ height: '100%',width:'100%'}">
-          <search :searchtype = 'search' @getdata="receive" > </search>
+       </van-popup> -->
+       <van-calendar v-model="showTime"  :show-confirm="false" @close="onClose" @confirm="onConfirm"/>
+       <van-popup v-model="popupshow" v-if="popupshow" :visible.sync="popupshow" position="bottom" :style="{ height: '75%' }" bind:close="onClose" closeable close-icon="close">
+          <search :searchtype = 'search' :placeholder = 'placeholder' @getdata="receive" v-if="searchShow"> </search>
+          <div v-if="searchDiv">
+            <selectName :facilityList = 'select' :timeFormatData= 'timeFormatData' @getdata="getdataRe" ></selectName>
+          </div>
        </van-popup>
       <div class="login-btn">
         <van-button color="#FF9900" :round="true" size="large" @click="cusappt()">预约报名</van-button>
@@ -38,41 +42,62 @@
 
 <script>
 import search from '@/components/search'
+import selectName from '@/components/select'
 import { Notify,Toast  } from 'vant';
 
 export default {
-  components: {search,Notify,Toast},
+  components: {search,Notify,Toast,selectName},
   data() {
     return {
       show: false,
       showTime: false,
+      searchDiv: false,
+      searchShow:false,
       time:'',
       actions: [
       ],
       info:{
 
       },
+      apptBegin1:'',
       currentDate: new Date(),
       changeDate: new Date(),
       popupshow: false,
-      search: ''
+      search: '',
+      placeholder: '',
+      select: [],
+      timeFormatData:''
     };
   },
   mounted() {
-    this.dateFormat("YYYY-mm-dd HH:MM:SS",new Date());
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL);
+      window.addEventListener('popstate', this.goBack, false);
+     }
+    // this.dateFormat("YYYY-mm-dd HH:MM:SS",new Date());
     this.$get(this.HOST + '/cusappt/appttype',{}).then((res) =>{
-      console.log(res)
+ 
       res.forEach(element => {
         element.id = element.name
         element.name = element.value
       });
-      console.log(res)
+     
       this.actions  = res
     }).catch(function (error) {
-        console.log(error);
+       
     });
   },
   methods: {
+    goBack(){
+      this.$router.replace({path: '/index'});
+    },
+    getdataRe(a,b) {
+       this.apptBegin1 = a.trim().split(" ")[1] + '-' + b.trim().split(" ")[1]
+       this.info.apptBegin = a
+       this.info.apptEnd = b
+        this.popupshow = false
+       this.showTime = false
+    },
     cusappt(){
       if(!this.info.cusId){
         Notify({ type: 'warning', message: '请选择会员' });
@@ -85,6 +110,7 @@ export default {
         return
       }
       this.$post(this.HOST + '/cusappt', this.info).then((res) =>{
+         if(res.code == 0){
           Toast({
             type: 'success',
             message: '预约成功',
@@ -93,12 +119,16 @@ export default {
           setTimeout(() => { 
             this.$router.push({ path:'/index' })
           }, 2000)
+         }else{
+            Toast.fail(res.msg)
+         }
         }).catch((error) => {
            Toast.fail('预约失败,请联系管理员')
         });
     },
-    onSearch(type){
-	
+    onSearch(type,placeholder){
+       this.placeholder = placeholder
+     
       if(type == 'type'){
         this.show = true
       }else if(type == 'apptBegin' ||type ==  'endBegin'){
@@ -106,6 +136,8 @@ export default {
        this.showTime = true
       }else{
         this.popupshow = true
+        this.searchShow = true
+         this.searchDiv = false
         this.search = type
       }
     },
@@ -129,19 +161,37 @@ export default {
       
     },
     onSelect(item){
-          console.log(item);
+        
           this.info.apptTypeName = item.name
           this.info.apptType = item.id
           this.show = false;
     },
+    onClose() {
+    this.showTime = false
+   },
+    formatDate(date) {
+      date = new Date(date);
+      return `${date.getMonth() + 1}/${date.getDate()}`;
+    },
+    onConfirm(event) {
+      
+      this.showTime = false
+      this.searchShow = false
+      this.searchDiv = true
+      this.popupshow = true
+      this.timeFormatData = this.timeFormat(event)
+       this.$get(this.HOST + '/cusappt/sch',{date:this.timeFormat(event),empId:this.info.empId}).then((res) =>{
+          this.select = res
+        }).catch(function (error) {
+            console.log(error);
+        });
+    },
+
     toCancel(){
       this.show = false
     },
      showPopup() {
         this.show = true;
-      },
-      changeFn() { // 值变化是触发
-        this.changeDate = this.currentDate // Tue Sep 08 2020 00:00:00 GMT+0800 (中国标准时间)
       },
       confirmFn() { // 确定按钮
       if(this.time =='apptBegin'){
@@ -156,30 +206,19 @@ export default {
         this.showTime = false;
       },
       timeFormat(time) { // 时间格式化 2019-09-08
-        let year = time.getFullYear();
-        let month = time.getMonth() + 1;
-        let day = time.getDate();
-        return year + '-' + month + '-' + day
+        var d = new Date(time);
+        var datetime=this.formatDa(d)
+        return datetime
       },
-       dateFormat(fmt, date) {
-          let ret;
-          const opt = {
-              "Y+": date.getFullYear().toString(),        // 年
-              "m+": (date.getMonth() + 1).toString(),     // 月
-              "d+": date.getDate().toString(),            // 日
-              "H+": date.getHours().toString(),           // 时
-              "M+": date.getMinutes().toString(),         // 分
-              "S+": date.getSeconds().toString()          // 秒
-              // 有其他格式化字符需求可以继续添加，必须转化成字符串
-          };
-          for (let k in opt) {
-              ret = new RegExp("(" + k + ")").exec(fmt);
-              if (ret) {
-                  fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-              };
-          };
-          return fmt;
-       }
+      formatDa(date) {  
+        var y = date.getFullYear();  
+        var m = date.getMonth() + 1;  
+        m = m < 10 ? '0' + m : m;  
+        var d = date.getDate();  
+        d = d < 10 ? ('0' + d) : d;  
+        return y + '-' + m + '-' + d;  
+    }
+       
   },
   created() {
 
@@ -187,12 +226,16 @@ export default {
   computed: {
     
   },
-  watch: {},
+  watch: {
+    
+  },
 }
 </script>
 
 <style lang='less' scoped>
-
+/deep/ .van-calendar__selected-day {
+      background-color: #FF9A00;
+}
 // /deep/  .van-picker__toolbar{
 //   height: 60px;
 //   line-height: 60px;

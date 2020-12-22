@@ -13,7 +13,8 @@ Vue.use(Toast,Notify);
 // Vue.use(VueAxios)
 import qs from 'qs'
 Vue.config.productionTip = false
-
+// import vConsole from 'vconsole'
+// Vue.prototype.$vConsole= new vConsole()
 // 软键盘弹出问题
 import keyboard from '@/utils/softKeyboard'
 Vue.prototype.$blur = keyboard.blur;
@@ -32,14 +33,12 @@ Vue.prototype.$get = get;
 
 /**结合lib-flexible、px2rem实现移动端适配**/
 import 'amfe-flexible/index.js'
-
-
 Axios.defaults.timeout = 5000;
 Axios.defaults.baseURL ='';
 // 添加请求拦截器，在请求头中加token
 Axios.interceptors.request.use(
   config => {
-    if(config.url!='/login'){ //登录页面不验证token
+    // if(config.url!='/login'){ //登录页面不验证token
       let token = localStorage.getItem('userToken');
       // let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ'
       // token = token.replace(/\"/g, "")
@@ -50,7 +49,7 @@ Axios.interceptors.request.use(
       // if(config.method == 'post') {
       //   config.Accept = 'application/json'
       // }
-    }
+    // }
     return config;
   },
   error => {
@@ -59,7 +58,7 @@ Axios.interceptors.request.use(
 // 添加响应拦截器
 Axios.interceptors.response.use(function (response) {
   if(response.data.code == 1001){
-    localStorage.clear()
+    // localStorage.clear()
     router.push({
       path: "/login",  //从哪个页面跳转
     })

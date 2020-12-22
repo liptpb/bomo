@@ -1,8 +1,11 @@
 <template>
   <div class="login-box">
-    <div class="container">
+    <!-- <div class="container">
       <div class="icon"></div>
       <p>Bomo</p>
+    </div> -->
+    <div class="imgBox">
+        <div class='imgBoxInfo'></div>
     </div>
       <div class="login-content">
           <div class="login-item flex alignCenter">
@@ -98,6 +101,22 @@
         background-color: #ffffff;
         text-align: center;
         overflow: hidden;
+        .imgBox{
+            width: 100%;
+            height: 445px;
+            display: flex;
+            border:0px solid #000;
+            align-items:center;
+                justify-content:center;
+            .imgBoxInfo{
+              
+              width: 329px;
+              height:149px;
+              background: url("./img/0.png") no-repeat center;
+              background-size: 100% 100%;
+              
+            }
+        }
         .container{
                 width:100%;
                  height: 500px;
@@ -123,7 +142,7 @@
         }
        
         .login-content {
-            padding: 170px 43px 0;
+            padding: 40px 43px 0;
             // height: calc(100% - 400px);
             .login-item {
                 height: 100px;

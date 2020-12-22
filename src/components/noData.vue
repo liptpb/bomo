@@ -6,7 +6,7 @@
 <template>
   <div class='nodata'>
       	<div class="container">
-		<div class="icon"></div>
+		      <div class="icon" v-show="icon"></div>
 		<p>{{mess}}</p>
 	</div>
   </div>
@@ -24,6 +24,10 @@ export default {
     mess: {
         type: String,                
         default: '暂时没有信息!'    
+    },
+    icon:{
+       type: Boolean, 
+       default: true
     }
   },
   mounted() {
@@ -44,13 +48,13 @@ export default {
 .nodata{
     .container{
 			width:100%;
-			min-height: 150px;
-            background-color:transparent;
+			min-height: 50px;
+            background-color:#fff;
             text-align: center;
             padding-bottom: 20px;
             .icon{
-			width:60px;
-			height:80px;
+			width:150px;
+			height:150px;
 			background-image: url("../assets/0.png");
 			-webkit-background-size: 100% 100%;
 			background-size: 100% 100%;

@@ -8,14 +8,14 @@
      <div class='feedback_top'> 
         <div>
           <ul>
-             <li>顾客：<span>{{items[0].cusName}}</span></li>
-             <li>服务日期：<span>{{items[0].date}}</span></li>
+             <li class='itemInfo1'>顾客姓名：<span>{{items[0]&&items[0].cusName}}</span></li>
+             <li class='itemInfo1'>服务日期：<span>{{datainfo}}</span></li>
              <li class='itemInfo'><p>服务项目：</p>
                  <table>
                      <tr v-for="(item, index) in items" :key="index">
-                         <td>{{item.itemName}}</td>
-                         <td>{{item.quantityUse}}</td>
-                         <td>{{item.fuwu}}</td>
+                         <td class="td1">{{item.itemName}}</td>
+                         <td class="td2"></td>
+                         <td class="td3">X{{item.quantityUse}}</td>
                      </tr>
                  </table>
              </li>
@@ -24,17 +24,16 @@
      </div>
      <div class='feedback_cont'>
        <div class='textarea'>
-         <van-cell-group>
+         <!-- <van-cell-group>
               <van-field
                 value=""
                 type="textarea"
-                placeholder="评论一下本次服务吧~"
-                autosize
-                border="false"
-                height="150"
+                placeholder="请客观填写本次治疗反馈！"
                 v-model="cont"
              />
-         </van-cell-group>
+         </van-cell-group> -->
+         <textarea placeholder="请客观填写本次治疗反馈！"  v-model="cont"> 
+         </textarea>
        </div>
      </div>
      <div class="feedback_bottom"> 
@@ -56,46 +55,132 @@ export default {
   data() {
     return {
       cont: '',
-      items: []
+      items: [],
+      datainfo: '',
+      feedbackNum: '',
+      feedbackNumold:true,
+      orderNum:''
     };
   },
+  created(){
+    // console.log('22222222')
+    // let query = this.$route.query
+    // this.$get(this.HOST + '/cbi/items', query).then((res) =>{
+    //   console.log('22222222')
+    //   console.log(res)
+    //   console.log(res[0].feedback)
+    //    this.feedbackNum = res[0].feedback
+    //     }).catch(function (error) {
+    //         console.log(error);
+    //     });
+  },
   mounted() {
+    // this.getDeleteComment()
+   if (window.history && window.history.pushState) {
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', this.goBack, false);
+   }
+
+   
     let query = this.$route.query
+   this.$get(this.HOST + '/cbi/items', query).then((res1) =>{
+     this.feedbackNum = res1[0].feedback
+     let orderNoName = []
+     for(var i=0;i<res1.length;i++){
+       orderNoName.push(res1[i].subOrderNo)
+     }
+     this.orderNum = orderNoName.join('_')
+    if(this.feedbackNum  == '1' && this.$route.query.cusid){
+       setTimeout(() => { 
+            this.$router.push({ path:'/otherSee' ,query: {
+            cusId: this.$route.query.cusid,com:'com'}
+           })  
+         })
+    }else{
     this.$get(this.HOST + '/cbi/items', query).then((res) =>{
-          console.log(res)
           this.items = res
+          // console.log(this.setNowTimes(this.items[0].date))
+          this.datainfo = this.setNowTimes(this.items[0].date)
+         
         }).catch(function (error) {
             console.log(error);
         });
+    }
+    });
   },
+  
+// destroyed(){
+//   window.removeEventListener('popstate', this.goBack, false);
+// },
   methods: {
+    goBack(){
+      this.feedbackNum = ''
+      this.feedbackNumold = false
+      this.$router.replace({path: '/index'});
+    
+    },
+    async getDeleteComment () {
+      let query = this.$route.query
+      query.orderNo = this.orderNum
+      const resp = await this.$get(this.HOST + '/cbi/items', query).then((res) =>{
+          this.feedbackNum = res[0].feedback
+         
+        }).catch(function (error) {
+            console.log(error);
+        });
+    
+    },
     sumitClick(){
-    let id = this.$route.query.cusId
+    let id = this.$route.query.cusid
+    let orderNo = this.$route.query.orderNo
+    let orderTimeStr = this.$route.query.date
+     let type = this.$route.query.type
     let data = {
-     'cusId' : id ,
+     'empid' : id ,
      'cont' : this.cont
     }
     if(this.cont.length<=0){
-        Notify({ type: 'warning', message: '评论一下本次服务吧~' });
+        Notify({ type: 'warning', message: '请客观填写本次治疗反馈~' });
         return
     }
     // let data1 = JSON.parse(data)
-    this.$post(this.HOST + '/cbi/feekback', {cusId:id, cont: this.cont}).then((res) =>{
-          Toast({
+    this.$post(this.HOST + '/cbi/feekback', {cusId:id, cont: this.cont,orderNo:this.orderNum,orderTimeStr:orderTimeStr,type:type}).then((res) =>{
+      if(res.code == 0){
+        Toast({
             type: 'success',
             message: '反馈成功',
             mask:true
           });
           setTimeout(() => { 
-            this.$router.push({ path:'/serviceAll' })
+            this.$router.push({ path:'/otherSee' ,query: {
+            cusId: this.$route.query.cusid,com:'com'
+      }  })
           }, 2000)
+      }else{
+        Toast.fail(res.msg)
+      }
+          
         }).catch((error) => {
           Toast.fail('反馈失败,请联系管理员')
         });
+    },
+    setNowTimes (da) {
+      let dat1 = da.split("月")
+      let dat2 = dat1[1].split("日")[0]
+      let myDate1 = new Date()
+      let yy1 = String(myDate1.getFullYear())
+      let myDate = new Date(yy1,dat1[0]-1,dat2)
+      let wk = myDate.getDay()
+      let yy = String(myDate.getFullYear())
+      let mm = myDate.getMonth() + 1
+      let dd = String(myDate.getDate() < 10 ? '0' + myDate.getDate() : myDate.getDate())
+      let hou = String(myDate.getHours() < 10 ? '0' + myDate.getHours() : myDate.getHours())
+      let min = String(myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes())
+      let sec = String(myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds())
+      let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      let week = weeks[wk]
+      return  yy + '-' + mm + '-' + dd +' ' + week
     }
-  },
-  created() {
-
   },
   computed: {},
   watch: {},
@@ -104,7 +189,7 @@ export default {
 <style lang='less' scoped>
 
 .feedback{
-    padding: 30px;
+    padding: 30px 30px 30px 30px;
     .feedback_top{
         width:100%;
         min-height:180px;
@@ -112,28 +197,53 @@ export default {
         background:rgba(255,255,255,1);
         border-radius:20px;
         div{
-             padding: 37px;
+             padding: 37px 37px 30px 37px;
           ul{
             li{
-              height:31px;
+              height:auto;
                 font-size:32px;
                 font-family:PingFang SC;
                 font-weight:bold;
                 color:rgba(52,52,52,1);
-                line-height:32px;  
-                margin-bottom: 25px;
+                
+                // margin-bottom: 20px;
                 span{
                   font-weight:500;
                   color:#FF9900;
                 }
             }
+            .itemInfo1{
+              //  line-height:32px; 
+            }
             .itemInfo{
                display: flex;
+               justify-content: space-between;
                font-weight:500;
                color:#FF9900;
+               line-height:auto !important;
                p{
                   font-weight:bold;
                 color:rgba(52,52,52,1); 
+               }
+               table{
+                  position: relative;
+                 width: 70%;
+                 tr{
+                   margin-bottom: 10px;
+                   .td1{
+                   max-width: 50%;
+                   vertical-align: text-bottom;
+                 }
+                 .td2{
+                    width: 20%;
+                    vertical-align: text-bottom;
+                 }
+                 .td3{
+                    width: 30%;
+                    text-align: right;
+                 }
+                 }
+                 
                }
             }
           }
@@ -141,20 +251,41 @@ export default {
     }
     .feedback_cont{
         width:690px;
-        height:266px;
+        height:270px;
         margin-top: 30px;
-        background:rgba(255,255,255,1);
+        // background:rgba(255,255,255,1);
         border-radius:20px;
         .textarea{
-          padding: 37px;
-         /deep/ .van-field__control{
-             height: 188px !important;
-             padding: 10px; 
-          }  
+          // padding: 37px;
+           border-radius:20px;
+           height: 3.6rem !important;
+           textarea{
+             width: 650px;
+             font-size: 30px;
+              height: 266px;
+              background: #FFFFFF;
+              border-radius: 20px;
+              border:0px;
+              padding: 20px;
+           }
+           /deep/ .van-cell-group{
+            border-radius:20px !important;
+           }
+          /deep/ .van-cell{
+            padding: 0 !important;
+            border-radius:20px !important;
+            /deep/ .van-field__control{
+              // height:270px !important;
+               height: 3.6rem !important;
+              border-radius:20px;
+              padding: 15px 0 0 34px; 
+          }
+          }
+           
         }
     }
     .feedback_bottom{
-        margin-top:20px ;
+        margin-top:80px ;
        ul{
             li{
                font-size:28px;
@@ -165,7 +296,7 @@ export default {
         }
     }
     .login-btn {
-    margin-top:150px;
+    margin-top:300px;
     margin-bottom: 47px;
     padding: 0 24px;
     /deep/ .van-button{

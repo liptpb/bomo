@@ -10,7 +10,7 @@
         <div class="infoboxInfo">
             <div class='infona'>
             <div class="infotime">
-            服务时间：<span>{{item.apptEnd|formatDate}}</span>
+            服务时间：<span>{{item.apptBegin|formatDate1}} {{item.apptBegin|formatDate}}-{{item.apptEnd|formatDate}}</span>
             </div>
             <div class='infotime'>
             服务项目：<span>{{item.itemName}}</span>
@@ -18,16 +18,17 @@
             </div> 
             <div class='zhenduan' @click="seeFunction(item.cusId)">查看诊断</div>
         </div>
+        <div class="lsfu">服务老师：<span>{{item.createName}}</span></div>
         <div class="border" v-if='index < tclistArray.length-1'></div>
         </div>
         <div class="more" v-if='tclistArrayOld.length > 3' @click="moreClick()" ><van-icon :name=name style="vertical-align: middle;"/> {{text}}</div>
-        <noData mess="今日无提成项目" v-show="tclistArrayOld.length<1"></noData>
+        <noData :mess="mess" v-show="tclistArrayOld.length<1" :icon="false"></noData>
   </div>
 </template>
 
 <script>
 import noData from '@/components/noData'
-import {formatDate} from '@/utils/index.js'
+import {formatDate,formatDate1} from '@/utils/index.js'
 export default {
   components: {noData},
   data() {
@@ -42,7 +43,11 @@ export default {
     serviceInfoData: {
         type: Array,                
         default: []     
-    }
+    },
+    mess: {
+        type: String,                
+        default: []     
+    },
   },
   mounted() {
   
@@ -50,7 +55,11 @@ export default {
   filters:{
     formatDate(time){
         var data = new Date(time);
-        return formatDate(data,'yyyy-MM-dd hh:mm:ss');
+        return formatDate(data,'hh:mm');
+    },
+    formatDate1(time){
+        var data = new Date(time);
+        return formatDate1(data,'MM-dd');
     }
   },
   methods: {
@@ -158,6 +167,18 @@ export default {
                 font-family:PingFang SC;
                 font-weight:500;
                 color:rgba(255,153,0,1);
+               }
+            }
+            .lsfu{
+              height: 0.30667rem;
+              line-height: 0.42667rem;
+              font-size: 0.32rem;
+              font-family: PingFang SC;
+              font-weight: bold;
+              color: #343434;
+              margin-bottom: 0.13333rem;
+               span{
+                 color: #ff9a00;
                }
             }
             .border{

@@ -175,13 +175,12 @@
             }
         },
         created() {
-          debugger
           this.$get(this.HOST + '/index', {
             
             }).then((res) =>{
-                console.log(res)
+                
               }).catch(function (error) {
-                  console.log(error);
+             
               });
         },
         watch: {

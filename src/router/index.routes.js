@@ -58,15 +58,15 @@ export default [
               tree: 0
             },
           },
-          {
-            path: 'search',
-            name: 'search',
-            component: _import('pages/search'),
-            meta: {
-              title: '搜索',
-              tree: 0
-            },
-          },
+          // {
+          //   path: 'search',
+          //   name: 'search',
+          //   component: _import('pages/search'),
+          //   meta: {
+          //     title: '搜索',
+          //     tree: 0
+          //   },
+          // },
           {
             path: 'onRefresh',
             name: 'onRefresh',

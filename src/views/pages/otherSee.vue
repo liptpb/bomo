@@ -13,17 +13,19 @@
             placeholder="输入顾客姓名/手机号/会员编号/进行搜索"
           />
         </div>
-         <van-popup v-model="popupshow" position="right" :style="{ height: '100%',width:'100%'}">
+         <van-popup v-model="popupshow" v-if="popupshow" :visible.sync="popupshow" position="right" :style="{ height: '100%',width:'100%'}">
           <search :searchtype = 'search1' @getdata="receive" > </search>
        </van-popup> 
        <div v-if="cusId">
         <div class='cusNameInfo' v-show="flexJue">
            <ul>
              <li class="flexJue">
-               <p>顾客编号: {{cusInfo.cusCode}}</p>
-               <p>顾客:{{cusInfo.cusName}}</p>
+               <p>顾客姓名:{{cusInfo.cusName}}</p>
+               <p class='nameflex'>顾客编号: {{cusInfo.cusCode}}</p>
+              
              </li>
-             <li>会员级别: {{cusInfo.levelName}}  {{cusInfo.rate}}折</li>
+              <!-- <li>服务项目: {{cusInfo.mobile}}</li> -->
+             <li>会员级别: {{cusInfo.levelName}} </li>
              <li>电话: {{cusInfo.mobile}}</li>
              <li>年龄: {{cusInfo.age}}</li>
              <li>开卡时间: {{cusInfo.kksj}}</li>
@@ -45,9 +47,12 @@
               </ul>
             </div>
             <div class='hr'></div>
-            <div class='flexJue'>
+            <div class='flexJue' style="padding-bottom:0">
                 <p>治疗师：{{item.empName}} 
-                <p>{{item.createTimeStr}}</p>
+                <p>{{reversedMessage(item.createTimeStr)}}</p>
+            </div>
+             <div class='flexJue' style="padding-top:0">
+                <p>服务项目：{{item.itemName}} </p>
             </div>
             <div class="border"></div>
           </div>
@@ -67,13 +72,18 @@
                  {{item.shouz}}</li>
                  <li><span class='colorH'>脉诊：</span>
                  {{item.maiz}}</li>
+                 <li><span class='colorH'>治疗方案：</span>
+                 {{item.treatment}}</li>
               </ul>
             </div>
             <div class='hr'></div>
             <div class='flexJue'>
-                <p>治疗师：{{item.zlsName}} 跟诊：{{item.zdsName}}</p>
-                <p>{{item.zdTime}}</p>
+                <p>诊断老师：{{item.zdsName}}&nbsp;&nbsp;&nbsp;&nbsp;跟诊老师：{{item.zlsName}}</p>
+                <p>{{reversedMessage(item.zdTime) }}</p>
             </div>
+             <!-- <div class='flexJue'  style="padding-top:0">
+                <p>服务项目：{{item.itemName}} </p>
+            </div> -->
             <div class="border"></div>
           </div>
           <noData mess="无诊断记录" v-show="imps.length<1"></noData>
@@ -105,6 +115,9 @@ export default {
   },
   mounted() {
     let id = this.$route.query.cusId
+    if(this.$route.query.com){
+      this.tabShow = false
+    }
     if(id){
       this.dataName(id)
       this.cusId = true
@@ -123,7 +136,6 @@ export default {
      this.$get(this.HOST + '/cbi/' + id, {
        
       }).then((res) =>{
-          console.log(res)
           this.cusInfo = res
           this.fbs = res.fbs
           this.imps = res.imps
@@ -147,12 +159,19 @@ export default {
          this.cusId = true
       }
       this.popupshow = false
+    },
+    reversedMessage:  (data) => {
+      // `this` 指向 vm 实例
+      return data? data.split(' ')[0] : ''
     }
   },
   created() {
 
   },
-  computed: {},
+  computed: {
+    // 计算属性的 getter
+    
+  },
   watch: {},
 }
 </script>
@@ -163,6 +182,9 @@ export default {
 //   height: 50px;
 //     line-height: 50px; 
 // }
+/deep/ .van-search__content{
+   background:rgba(255,255,255,1);
+}
 .indexAll{
    padding: 0 24px;
    .search{
@@ -186,6 +208,10 @@ export default {
             font-family: PingFang SC;
             font-weight: bold;
             color: #343434;
+        }
+        .nameflex{
+          font-size: 24px;
+          padding-top: 8px;
         }
         .flexJue{
           
@@ -226,7 +252,7 @@ export default {
      .zhenduanbox{
        padding: 37px 37px 20px 37px;
        li{
-         margin-bottom: 5px;
+         margin-bottom: 15px;word-break:break-all;
        }
      }
      .hr{
