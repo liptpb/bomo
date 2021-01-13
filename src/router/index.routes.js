@@ -32,6 +32,15 @@ export default [
             },
           },
           {
+            path: 'echarts1',
+            name: 'echarts1',
+            component: _import('pages/echarts1'),
+            meta: {
+              title: '报表',
+              tree: 0
+            },
+          },
+          {
             path: 'serviceAll',
             name: 'serviceAll',
             component: _import('pages/serviceAll'),

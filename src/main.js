@@ -9,8 +9,8 @@ import 'vant/lib/index.css'
 Vue.use(Vant)
 import { Toast ,Notify} from "vant";
 Vue.use(Toast,Notify); 
-// import { VueAxios } from './utils/request'
-// Vue.use(VueAxios)
+import { VueAxios } from './utils/request'
+Vue.use(VueAxios)
 import qs from 'qs'
 Vue.config.productionTip = false
 // import vConsole from 'vconsole'
@@ -20,7 +20,8 @@ import keyboard from '@/utils/softKeyboard'
 Vue.prototype.$blur = keyboard.blur;
 Vue.prototype.$focus = keyboard.focusInput;
 
-
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 /**Axios**/
 import Axios from 'axios'
 Vue.prototype.$axios = Axios
@@ -39,6 +40,7 @@ Axios.defaults.baseURL ='';
 Axios.interceptors.request.use(
   config => {
     // if(config.url!='/login'){ //登录页面不验证token
+      
       let token = localStorage.getItem('userToken');
       // let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXBpZCI6NDMsIm9wZW5pZCI6IiIsImlkIjoxLCJvcmdpZCI6IjIifQ.m5LnpQlggxTJlhYUCM9axAu82p6_Iv0dl4O66CUh2kQ'
       // token = token.replace(/\"/g, "")

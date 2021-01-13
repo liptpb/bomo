@@ -63,17 +63,17 @@
              <div class='zhenduanbox'>
               <ul>
                  <li><span class='colorH'>自述：</span>
-                 {{item.disease}}</li>
+                 <span v-html="textareaTo(item.disease)"></span></li>
                  <li><span class='colorH'>面诊：</span>
-                 {{item.mianz}}</li>
+                 <span v-html="textareaTo(item.mianz)"></span></li>
                  <li><span class='colorH'>舌诊：</span>
-                 {{item.shez}}</li>
+                 <span v-html="textareaTo(item.shez)"></span></li>
                  <li><span class='colorH'>手诊：</span>
-                 {{item.shouz}}</li>
+                 <span v-html="textareaTo(item.shouz)"></span></li>
                  <li><span class='colorH'>脉诊：</span>
-                 {{item.maiz}}</li>
-                 <li><span class='colorH'>治疗方案：</span>
-                 {{item.treatment}}</li>
+                 <span v-html="textareaTo(item.maiz)"></span></li>
+                 <li><span class='colorH'>治疗方案：</span><span v-html="textareaTo(item.treatment)"></span>
+                </li>
               </ul>
             </div>
             <div class='hr'></div>
@@ -163,7 +163,16 @@ export default {
     reversedMessage:  (data) => {
       // `this` 指向 vm 实例
       return data? data.split(' ')[0] : ''
-    }
+    },
+     textareaTo(str) {
+        let regs = new RegExp("\r", "g");
+        let reg = new RegExp("\n", "g");
+        let regSpace = new RegExp(" ", "g");
+        str = str.replace(reg, "<br/>");
+        str = str.replace(regs, "<br/>");
+        str = str.replace(regSpace, "&nbsp;");
+        return str;
+    },
   },
   created() {
 
@@ -253,6 +262,9 @@ export default {
        padding: 37px 37px 20px 37px;
        li{
          margin-bottom: 15px;word-break:break-all;
+         font-family: PingFang SC;
+    font-weight: bold;
+    color: #343434;
        }
      }
      .hr{

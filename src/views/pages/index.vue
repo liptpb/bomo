@@ -5,25 +5,35 @@
  * @date: 2020-08-23 
  */
 <template>
-  <div class='indexAll'>
+  <div class='indexAll' >
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <div class='indextop'>
           <div class="topinfo">
             <div class='indextopName'>
              你好，{{info.empName}}
+             <div @click='outLogin()' class='imgBoxOut1'>
+               <div class='imgBoxOut' >
+                 <div class='imgBoxOutImg'></div>
+               </div>
+               <div class='imgBoxOuttext'>退出</div>
+              </div>
             </div>
-            <div class='indextopInfo'>
-              <div>{{info.mobile}}</div>
-              <div class="tip"  @click="notFeedbackNumber()" v-if="info.notFeedbackNumber > 0">您还有<span style="font-weight: bold;">{{info.notFeedbackNumber}}</span>个项目未反馈!</div>
+            <div class='imgtopName'>
+               <div class='imgBox'>
+                 <img :src="info.picUrl"  alt="" />
+                </div>
+               <div class='imgtopName1'>
+                  <div class='indextopInfo'>
+                    <div>{{info.mobile}}</div>
+                    <div class="tip"  @click="notFeedbackNumber()" v-if="info.notFeedbackNumber > 0" >您还有<span style="font-weight: bold;">{{info.notFeedbackNumber}}</span>个项目未反馈!</div>
+                  </div>
+                  <div class='indextopbottom'>
+                    <div class="time">{{info.data}} {{info.week}}</div>
+                    <div >今日收入<span>{{info.jrsr}}</span>元</div>
+                  </div>
+               </div>
             </div>
-            <div class='indextopbottom'>
-                <div class="time">{{info.data}} {{info.week}}</div>
-                <div>今日收入<span>{{info.jrsr}}</span>元</div>
-            </div>
-          </div>
-          <div class='imgBox'>
-              <img :src="info.picUrl"  alt="" />
           </div>
       </div>
       <div class="yuyue">
@@ -88,6 +98,7 @@
   </div>
 </template>
 <script>
+import { Notify,Toast,Dialog  } from 'vant';
 import deductCom from '@/components/deductCom'
 import deductComp from '@/components/deductComp'
 import serviceInfo from '@/components/serviceInfo'
@@ -96,6 +107,7 @@ import noData from '@/components/noData'
 import {formatDate} from '@/utils/index.js'
 export default {
   components: {
+    Dialog,
     deductComp,
     noData,
     serviceInfo,
@@ -135,6 +147,24 @@ export default {
     }
   },
   methods: {
+    echarts(){
+      this.$router.push({ path:'/echarts1' ,query: {
+      type: '2',empId:'42',date:'2020-11-11'
+      } })
+    },
+    outLogin(){
+     Dialog.alert({
+         title: "", //加上标题
+         message: "确认退出？", //改变弹出框的内容
+         showCancelButton: true //展示取水按钮
+      })
+      .then(() => { //点击确认按钮后的调用
+              this.$router.push({ path:'/login'  })
+      })
+      .catch(() => { //点击取消按钮后的调用
+              
+      })
+    },
     infoData(){
       this.loading = true;
       this.$get(this.HOST + '/index', {
@@ -243,10 +273,20 @@ export default {
   watch: {},
 }
 </script>
-
+<style >
+ .van-tabs__line{
+   background-color: #FF9A00;
+}
+</style>
 <style lang='less' scoped>
 /deep/ .van-tabs__line{
    background-color: #FF9A00;
+}
+/deep/ .van-dialog__confirm{
+    color: #FF9A00 !important;
+}
+/deep/ .van-dialog__confirm, .van-dialog__confirm:active {
+    color: #FF9A00 !important;
 }
 .activeName{
   margin-top: 30px;
@@ -258,8 +298,35 @@ export default {
      width:100% ;
      height:318px;
      background:linear-gradient(-90deg,#FF9A00,#FF9A00);  
+     .imgBoxOut1{
+        position: absolute;
+          top: 62px;
+          right: 42px;
+          width: 110px;
+          display: flex;
+          text-align: right;
+      .imgBoxOut{
+        width: 40px;
+        height: 40px;
+        .imgBoxOutImg{
+          width: 100%;
+          height: 100%;
+            background-image: url("../../assets/9.png");
+          -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+        }
+        
+      }
+      .imgBoxOuttext{
+            font-size:30px;
+          font-family:PingFang SC;
+            color:rgba(255,255,255,1);
+            margin-left: 5px;
+            margin-top: 5px;
+        }
+     }
      .topinfo{
-         padding: 0 24px 24px 24px;
+         padding: 0 42px 24px 42px;
       .indextopName{
         font-size:48px;
         font-family:PingFang SC;
@@ -270,8 +337,30 @@ export default {
         // margin-left: 24px;
         height:49px;
         line-height:32px;
+        
         }
-        .indextopInfo{
+        .imgtopName{
+          display: flex;
+          margin-top: 19px;
+          .imgBox{
+        //  width: 91px;
+            width: 91px;
+            height: 91px;
+            // position: absolute;
+            // top: 70px;
+            // right: 24px;
+            margin-right: 15px;
+            margin-top: 10px;
+            // border-radius: 50%;
+            img{
+                width: 100%;
+                // height: 100%;
+                border-radius: 50%;
+            }
+            }
+            .imgtopName1{
+              width: 100%;
+               .indextopInfo{
             font-size:28px;
             font-family:PingFang SC;
             font-weight: bold;
@@ -279,7 +368,7 @@ export default {
             height:25px;
             line-height:32px;
             width: 100%;
-            margin: 20px 0;
+            margin: 15px 0;
             display: flex;
         }
         .tip{
@@ -300,6 +389,7 @@ export default {
             height:60px;
             line-height:40px;
             width: 100%;
+            margin-top: 7px;
             // padding-left: 24px;
             // padding-right: 24px;
             display: flex;
@@ -307,7 +397,7 @@ export default {
             align-content: space-between;  
             flex-wrap: wrap; 
             .time{
-              margin-top: 7px;
+              
             }
             span{
             font-size:48px;
@@ -316,20 +406,11 @@ export default {
                 vertical-align: middle;
             }
         }
+            }
+        }
+        
      }
-     .imgBox{
-         width: 91px;
-         height: 91px;
-         position: absolute;
-         top: 30px;
-         right: 24px;
-         border-radius: 50%;
-         img{
-             width: 100%;
-             height: 100%;
-             border-radius: 50%;
-         }
-     }
+     
   }
   .yuyue{
      width:690px;

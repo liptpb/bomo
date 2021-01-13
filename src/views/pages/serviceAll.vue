@@ -26,8 +26,9 @@
                </div> 
              </div>
              <div class='mony flexJue'>
-                   <p>提成<span>￥{{item.money}}</span></p>
-                   <div class='fankui' v-if="item.feedback =='0'" @click="feedback(item.consumer, item.empId, item.itemOrderTime,item.orderNo)">效果反馈</div>
+                   <p>提成<span>￥{{item.money}}</span> &nbsp;&nbsp;<b  v-if="item.extMoney > 0">额外激励</b><span  v-if="item.extMoney > 0">￥{{item.extMoney}}</span></p>
+                   
+                   <div class='fankui'  v-if="item.feedback =='0'" @click="feedback(item.consumer, item.empId, item.itemOrderTime,item.orderNo)">效果反馈</div>
              </div>
              <div class="border" v-if='index < items.length-1'></div>
            </div>

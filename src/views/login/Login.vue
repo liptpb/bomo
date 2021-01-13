@@ -42,7 +42,17 @@
                 repeatText: '',
             }
         },
+        mounted() {
+             if (window.history && window.history.pushState) {
+              history.pushState(null, null, document.URL);
+              window.addEventListener('popstate', this.goBack, false);
+            }
+        },
          methods: {
+             goBack(){
+    
+               this.$router.replace({path: '/login'});
+             },
             startCountDown(){
               
                 this.$post(this.HOST + '/login/vc', {
