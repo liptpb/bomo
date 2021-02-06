@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 import noData from '@/components/noData'
 export default {
   components: {noData},
@@ -97,7 +97,7 @@ export default {
           selected[title[i]] =  false
         }
       }
-      let color = ['#e95764','#aab3ec','#f5df4d','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
+      let color = ['#F5DF4D','#aab3ec','#e95764','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
 '#11b74b','#33c63a','#e9a91e','#d5df62','#62dfa6','#88ea91','#c3c666','#c6a366','#949597'];
       this.chart = echarts.init(this.$refs.myEchart1);
       this.chart.setOption({
@@ -115,7 +115,7 @@ export default {
               itemWidth: 10,
               icon:'rect',
               right: 10,
-              bottom: 42,
+              bottom: 45,
               // left:10,
               data: title,
               selected:selected
@@ -125,7 +125,7 @@ export default {
                   name: '',
                   type: 'pie',
                   selectedMode: 'single',
-                  center:['50%','50%'],
+                  center:['50%','35%'],
                   radius: [0, '30%'],
                   hoverAnimation: false, 
                   color: color,  
@@ -140,6 +140,7 @@ export default {
               {
                   name: '',
                   type: 'pie',
+                  center:['50%','35%'],
                   radius: ['40%', '55%'],
                   label: {                        // 饼图图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等.
                       normal: {
@@ -190,15 +191,15 @@ export default {
               }
           }
           if(val.length==1){
-            if(Object.keys(this.echartDataxi).length == 0){
-              this.echaerts = this.echartDatask
-            }
-            if(Object.keys(this.echartDatask).length == 0){
-              this.echaerts = this.echartDataxi
-            }
+            if(!this.echartDataxi || Object.keys(this.echartDataxi).length == 0){
+                this.echaerts = this.echartDatask
+              }
+              if( !this.echartDatask || Object.keys(this.echartDatask).length == 0){
+                this.echaerts = this.echartDataxi
+              }
           }
       },
-      deep:true
+      // deep:true
     },
     echaerts:function(val,oldval){
       this.initChart(val);
@@ -262,9 +263,9 @@ export default {
                  margin-right: 8px;
             }
         }
-        .echart_IndexTitleLeft{
+        // .echart_IndexTitleLeft{
           
-        }
+        // }
         .echart_IndexTitleRight{
           .imgBoxOut{
             width: 30px;

@@ -47,11 +47,11 @@
               </ul>
             </div>
             <div class='hr'></div>
-            <div class='flexJue' style="padding-bottom:0">
+            <div class='flexJue' style="padding-bottom:0;color:#A9A9A9">
                 <p>治疗师：{{item.empName}} 
                 <p>{{reversedMessage(item.createTimeStr)}}</p>
             </div>
-             <div class='flexJue' style="padding-top:0">
+             <div class='flexJue' style="padding-top:0;color:#A9A9A9">
                 <p>服务项目：{{item.itemName}} </p>
             </div>
             <div class="border"></div>

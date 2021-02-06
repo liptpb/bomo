@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 import noData from '@/components/noData'
 export default {
   components: {noData},
@@ -59,6 +59,7 @@ export default {
     },
     option:{
         type: Array,
+        // required: true
     }
   },
   mounted() {
@@ -89,6 +90,7 @@ export default {
       }else{
         this.noData = false
       }
+      calData.sort(function (a, b) { return b.value - a.value; }) 
       let selected = {}
       let title=calData.map(v => v.name)
       for(var i =0;i<title.length;i++){
@@ -98,7 +100,7 @@ export default {
           selected[title[i]] =  false
         }
       }
-      let color = ['#e95764','#aab3ec','#f5df4d','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
+      let color = ['#F5DF4D','#aab3ec','#e95764','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
 '#11b74b','#33c63a','#e9a91e','#d5df62','#62dfa6','#88ea91','#c3c666','#c6a366','#949597'];
       this.chart = echarts.init(this.$refs.myEchart);
       this.chart.setOption({
@@ -109,7 +111,7 @@ export default {
           itemWidth: 10,
           icon:'rect',
           right: 10,
-          bottom: 42,
+          bottom: 45,
           // left:10,
           data: title,
           selected:selected
@@ -119,7 +121,7 @@ export default {
 	          return dom.style.transform = 'translateZ(0)';
 	        },
 	        show: true,                 // 是否显示提示框
-	        formatter: '{b} </br> 销量{c}元 </br> 占比{d}%'      // 提示框显示内容,此处{b}表示各数据项名称，此项配置为默认显示项，{c}表示数据项的值，默认不显示，({d}%)表示数据项项占比，默认不显示。
+	        formatter: '{b} </br> {c} </br> 占比{d}%'      // 提示框显示内容,此处{b}表示各数据项名称，此项配置为默认显示项，{c}表示数据项的值，默认不显示，({d}%)表示数据项项占比，默认不显示。
 	    },
 	    graphic: {
 	        type: 'text',               // [ default: image ]用 setOption 首次设定图形元素时必须指定。image, text, circle, sector, ring, polygon, polyline, rect, line, bezierCurve, arc, group,
@@ -137,17 +139,19 @@ export default {
 	    series: [{
 	        name: '',         // 系列名称
 	        type: 'pie',                    // 系列类型 
-	        center:['50%','50%'],           // 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
+	        center:['50%','40%'],           // 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。[ default: ['50%', '50%'] ]
 	        radius: ['30%', '45%'],         // 饼图的半径，数组的第一项是内半径，第二项是外半径。[ default: [0, '75%'] ]
-	        hoverAnimation: true,           // 是否开启 hover 在扇区上的放大动画效果。[ default: true ]
+          startAngle: 0,                  //起始刻度的角度，默认为 90 度，即圆心的正上方。0 度为圆心的正右方。
+          hoverAnimation: true,           // 是否开启 hover 在扇区上的放大动画效果。[ default: true ]
 	        color: color,                   // 圆环图的颜色
 	        label: {                        // 饼图图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等.
 	            normal: {
 	                show: true,             // 是否显示标签[ default: false ]
-	                position: 'outside',    // 标签的位置。'outside'饼图扇区外侧，通过视觉引导线连到相应的扇区。'inside','inner' 同 'inside',饼图扇区内部。'center'在饼图中心位置。
+	                // position: 'outside',    // 标签的位置。'outside'饼图扇区外侧，通过视觉引导线连到相应的扇区。'inside','inner' 同 'inside',饼图扇区内部。'center'在饼图中心位置。
                   formatter: '{b}:{c}'  // 标签内容
                   // formatter:function(params){   //让series 中的文字进行换行
-                  //     return params.name+":\n"+params.value;
+                  //     //return params.name+":\n"+params.value;
+                  //     return params.name
                   // },
 	            }
 	        },
@@ -191,17 +195,17 @@ export default {
               
             }
             if(val.length==1){
-              if(Object.keys(this.echartDataxi).length == 0){
+             if(!this.echartDataxi || Object.keys(this.echartDataxi).length == 0){
                 this.echaerts = this.echartDatask
               }
-              if(Object.keys(this.echartDatask).length == 0){
+              if( !this.echartDatask || Object.keys(this.echartDatask).length == 0){
                 this.echaerts = this.echartDataxi
               }
             }
            
             
       },
-      deep:true
+      // deep:true
     },
     echaerts:function(val,oldval){
       this.initChart(val);
@@ -265,9 +269,9 @@ export default {
                  margin-right: 8px;
             }
         }
-        .echart_IndexTitleLeft{
+        // .echart_IndexTitleLeft{
           
-        }
+        // }
         .echart_IndexTitleRight{
           .imgBoxOut{
             width: 30px;

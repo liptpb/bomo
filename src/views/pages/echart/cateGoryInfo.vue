@@ -3,28 +3,32 @@
        <div class="echart_contTiitle">{{headline}}</div>
        <div class="echart_contcont">
           <div class="echart_IndexTitle">
-             <div class="echart_IndexTitleLeft imgBoxOut1">
+             <div class="echart_IndexTitleLeft imgBoxOut1"  >
                 <div class='imgBoxOut' >
                   <div class='imgBoxOutImg'></div>
                 </div>
                 <div :class="[{ blodText: classBlack }, 'imgBoxOuttext']"  @click="blodText('sk')" v-show="empId==1||empId==5">蛇口店</div>
                 <div :class="[{ blodText: !classBlack }, 'imgBoxOuttext']"  @click="blodText('xl')" v-show="empId==27||empId==5">西丽店</div>
              </div>
-             <div class="echart_IndexTitleRight imgBoxOut1" style="justify-content: flex-end;position: relative;" v-if="selectType" @click="slectInfo()" >
+             <div class="echart_IndexTitleRight imgBoxOut1"   style="justify-content: flex-end;position: relative;" v-if="selectType" @click="slectInfo()" >
                 <p>选择对比</p><input type="text" readonly v-model="nameInput"><div>∨</div>
              </div>
           </div>
-           <div class='yourClassName' ref="myEchart">
+           <div class='yourClassName' ref="myEchart" v-show="noData">
             
            </div>
+            <noData mess="无数据" v-show="!noData" ></noData>
        </div>
        <van-action-sheet v-model="show" :actions="actions" cancel-text="取消" round @cancel="toCancel" @select="onSelect" />
+      
     </div>
 </template>
 
 <script>
-import echarts from 'echarts'
+import noData from '@/components/noData'
+import * as echarts from 'echarts'
 export default {
+  components: {noData},
   data() {
     return {
       classBlack: true,
@@ -36,7 +40,8 @@ export default {
       legend:'',
       show:false,// 下拉
       actions: [],
-      nameInput:''
+      nameInput:'',
+      noData:true
     };
   },
   props: {
@@ -59,7 +64,10 @@ export default {
     empId: {
         type: String,
         required: true,
-        default: '5',
+    },
+     empId101: {
+        type: String,
+        // required: true,
     },
     imgUrl: {
         type: String,
@@ -76,7 +84,7 @@ export default {
         type: String,
     },
   },
-  components: {},
+  // components: {},
   mounted() {
      
   },
@@ -106,7 +114,7 @@ export default {
            type: 'line',
         }
       
-        let color = ['#e95764','#aab3ec','#f5df4d','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
+        let color = ['#F5DF4D','#aab3ec','#e95764','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
 '#11b74b','#33c63a','#e9a91e','#d5df62','#62dfa6','#88ea91','#c3c666','#c6a366','#949597'];
       
       if(series&&xAxis&&legend){
@@ -257,8 +265,8 @@ export default {
      onSelect(item){
       this.nameInput = item.name
       this.show = false;
-      this.$get(this.HOST + '/report/echarts?type='+this.type+'&empId='+this.empId+'&target='+this.target+'&selectId=' + item.id).then((res) =>{
-        this.option = res['11']
+      this.$get(this.HOST + '/report/echarts?type='+this.type+'&empId='+this.empId101+'&target='+this.target+'&selectId=' + item.id).then((res) =>{
+        this.option = res[this.target]
       })
     },
     slectInfo(){
@@ -275,8 +283,15 @@ export default {
     option:{
       handler:function(val,oldval){
             if(!val){
+              
               return
             }
+            if(val.length==0){
+              this.noData = false
+            }else{
+              this.noData = true
+            }
+            
             this.echartDataxi = val.find((v) => {
                 return v.orgId == 3;
             })
@@ -303,15 +318,15 @@ export default {
            
             
       },
-      deep:true
+      // deep:true
     },
     echaerts:function(val,oldval){  
       this.initChart(val.data.series,val.data.xAxis,val.data.legend);
     },
     selectData:function(val,oldval){  
         this.nameInput = val[0].name
-        this.$get(this.HOST + '/report/echarts?type='+this.type+'&empId='+this.empId+'&target='+this.target+'&selectId=' + val[0].id).then((res) =>{
-          this.option = res['11']
+        this.$get(this.HOST + '/report/echarts?type='+this.type+'&empId='+this.empId101+'&target='+this.target+'&selectId=' + val[0].id).then((res) =>{
+          this.option = res[this.target]
         })
         this.actions = val
     }
@@ -374,9 +389,9 @@ export default {
                  margin-right: 8px;
             }
         }
-        .echart_IndexTitleLeft{
+        // .echart_IndexTitleLeft{
           
-        }
+        // }
         .echart_IndexTitleRight{
            p{             
             font-size: 26px;

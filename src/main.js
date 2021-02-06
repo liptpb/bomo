@@ -20,8 +20,8 @@ import keyboard from '@/utils/softKeyboard'
 Vue.prototype.$blur = keyboard.blur;
 Vue.prototype.$focus = keyboard.focusInput;
 
-import echarts from 'echarts'
-Vue.prototype.$echarts = echarts
+// import echarts from 'echarts'
+// Vue.prototype.$echarts = echarts
 /**Axios**/
 import Axios from 'axios'
 Vue.prototype.$axios = Axios

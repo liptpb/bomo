@@ -353,7 +353,8 @@ export default {
             margin-top: 10px;
             // border-radius: 50%;
             img{
-                width: 100%;
+                width: 91px;
+                height: 91px;
                 // height: 100%;
                 border-radius: 50%;
             }

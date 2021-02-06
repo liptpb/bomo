@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 export default {
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
               },
         }
       
-        let color = ['#e95764','#aab3ec','#f5df4d','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
+        let color = ['#F5DF4D','#aab3ec','#e95764','#faa7d1','#b21a1d','#b21a65','#ab06a9','#7a06ab','#4c06ab','#ad4e15','#dc7639','#b73011','#b78611','#86b711','#4fb711',
 '#11b74b','#33c63a','#e9a91e','#d5df62','#62dfa6','#88ea91','#c3c666','#c6a366','#949597'];
       
       if(series&&xAxis&&legend){
@@ -277,21 +277,21 @@ export default {
            this.series = val
            this.initChart(this.series,this.xAxis,this.legend)
       },
-      deep:true
+      // deep:true
     },
     xAxis1:{
       handler:function(val,oldval){
            this.xAxis = val
            this.initChart(this.series,this.xAxis,this.legend)
       },
-      deep:true
+      // deep:true
     },
     legend1:{
       handler:function(val,oldval){
            this.legend = val
            this.initChart(this.series,this.xAxis,this.legend)
       },
-      deep:true
+      // deep:true
     },
   },
 }
